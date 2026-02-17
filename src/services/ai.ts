@@ -85,12 +85,33 @@ function generateProfessionalContent(params: ResumeGenerationParams): GeneratedR
     }
 }
 
+import { supabase } from "@/lib/supabase"
+
 export const aiService = {
     generateResume: async (params: ResumeGenerationParams): Promise<GeneratedResumeData> => {
-        // Use built-in professional content generation
-        console.log('✨ Generating professional resume content...')
-        const result = generateProfessionalContent(params)
-        console.log('✅ Resume content generated successfully!')
-        return result
+        try {
+            console.log('✨ Attempting AI generation via Supabase...')
+
+            const { data, error } = await supabase.functions.invoke('generate-resume', {
+                body: params
+            })
+
+            if (error) {
+                console.warn('⚠️ Supabase function error, falling back to local generator:', error)
+                return generateProfessionalContent(params)
+            }
+
+            if (data && !data.error) {
+                console.log('✅ AI generation successful via Supabase!')
+                return data as GeneratedResumeData
+            }
+
+            console.warn('⚠️ AI generation returned error or empty data:', data?.error)
+            return generateProfessionalContent(params)
+
+        } catch (err) {
+            console.error('❌ AI service exception, using local fallback:', err)
+            return generateProfessionalContent(params)
+        }
     }
 }

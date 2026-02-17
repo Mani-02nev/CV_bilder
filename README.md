@@ -1,50 +1,44 @@
-# KS Resume Builder
+# 📄 KS Resume Builder
 
-Enterprise-grade AI Resume Builder SaaS Platform.
+A modern, professional AI-powered resume builder built with **React**, **Vite**, **Tailwind CSS**, and **Supabase**.
 
-## Features
+## 🚀 Features
 
-- **AI-Powered Generation**: Create professional resumes instantly using OpenAI.
-- **ATS Optimization**: Ensure your resume is parsed correctly.
-- **Multiple Templates**: Choose from professional templates.
-- **Real-time Preview**: Edit and view changes live.
-- **PDF Export**: High-quality export.
+-   **12 Professional Templates**: 4 Free and 8 Premium templates.
+-   **AI Smart Content**: Generate professional summaries and job descriptions automatically.
+-   **Live Interactive Preview**: Real-time resume preview with mobile-friendly scaling.
+-   **One-Click PDF Export**: Download your resume in high-quality PDF format.
+-   **Admin Dashboard**: Manage users and toggle Pro account status via a secure portal (`/admin`).
+-   **Mobile First**: Fully responsive design with smooth animations.
 
-## Tech Stack
+## 📁 Project Documentation
 
-- **Frontend**: React, Vite, TypeScript, TailwindCSS, ShadCN UI
-- **Backend**: Supabase (Auth, Database, Storage, Edge Functions)
-- **AI**: OpenAI API via Supabase Edge Functions
+All detailed project documentation, guides, and feature summaries have been moved to the `docs/` folder for a cleaner workspace:
 
-## Architecture
+-   [Quick Setup Guide](./docs/QUICK_SETUP.md)
+-   [AI Feature Setup](./docs/AI_SETUP.md)
+-   [Admin Panel Guide](./docs/LANDING_ADMIN_COMPLETE.md)
+-   [User Resume Flow](./docs/RESUME_CREATION_FLOW.md)
+-   [Feature Checklist](./docs/CHECKLIST.md)
 
-- `src/features`: Modular feature-based architecture (Auth, Dashboard, Builder, etc.)
-- `src/components`: Shared UI components (ShadCN)
-- `src/lib`: Utilities and Supabase client
-- `supabase/`: Database schema and Edge Functions
+## 🛠️ Deployment (Vercel + Supabase)
 
-## Setup
+1.  **Vercel Environment Variables**:
+    -   `VITE_SUPABASE_URL`: Your Supabase Project URL.
+    -   `VITE_SUPABASE_ANON_KEY`: Your Supabase Project Anon Key.
+2.  **Supabase Edge Functions**:
+    -   Deploy the `generate-resume` function using the Supabase CLI.
+    -   Add your `OPENAI_API_KEY` to the Supabase project secrets.
 
-1. **Clone Repository**
-2. **Install Dependencies**
-   ```bash
-   npm install
-   ```
-3. **Setup Environment Variables**
-   Create `.env` based on example.
-   ```
-   VITE_SUPABASE_URL=your_supabase_url
-   VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
-   ```
-4. **Deploy Supabase**
-   - Run `supabase/schema.sql` in your Supabase SQL Editor.
-   - Deploy Edge Function: `supabase functions deploy generate-resume`
-   - Set OPENAI_API_KEY in Supabase Secrets.
+## 💻 Local Development
 
-## Deployment
-
-Build the frontend:
 ```bash
-npm run build
+# Install dependencies
+npm install
+
+# Run dev server
+npm run dev
 ```
-Deploy to Vercel or any static host.
+
+---
+Built with ❤️ for professional career building.

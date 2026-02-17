@@ -6,7 +6,7 @@ const corsHeaders = {
     'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
-serve(async (req) => {
+serve(async (req: Request) => {
     if (req.method === 'OPTIONS') {
         return new Response('ok', { headers: corsHeaders })
     }
@@ -14,8 +14,12 @@ serve(async (req) => {
     try {
         const { jobTitle, industry, experienceLevel } = await req.json()
         const openAiKey = Deno.env.get('OPENAI_API_KEY')
+
         if (!openAiKey) {
-            throw new Error('Missing OpenAI API Key')
+            return new Response(JSON.stringify({ error: 'OpenAI API key not configured on server' }), {
+                headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+                status: 500,
+            })
         }
 
         const prompt = `Generate a professional resume data structure (JSON) for a ${jobTitle} with ${experienceLevel} level experience in the ${industry} industry. 
@@ -42,6 +46,11 @@ serve(async (req) => {
             }),
         })
 
+        if (!response.ok) {
+            const errorData = await response.json()
+            throw new Error(errorData.error?.message || 'OpenAI API Error')
+        }
+
         const data = await response.json()
         const generatedContent = JSON.parse(data.choices[0].message.content)
 
@@ -49,8 +58,8 @@ serve(async (req) => {
             headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         })
 
-    } catch (error) {
-        return new Response(JSON.stringify({ error: error.message }), {
+    } catch (error: any) {
+        return new Response(JSON.stringify({ error: error.message || 'Internal Server Error' }), {
             headers: { ...corsHeaders, 'Content-Type': 'application/json' },
             status: 400,
         })
