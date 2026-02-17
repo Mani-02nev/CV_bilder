@@ -1,11 +1,12 @@
 # 📄 KS Resume Builder
 
-A modern, professional AI-powered resume builder built with **React**, **Vite**, **Tailwind CSS**, and **Supabase**.
+A modern, professional resume builder built with **React**, **Vite**, **Tailwind CSS**, and **Supabase**.
 
 ## 🚀 Features
 
 -   **12 Professional Templates**: 4 Free and 8 Premium templates.
--   **AI Smart Content**: Generate professional summaries and job descriptions automatically.
+-   **Smart Content Generator**: Instantly generate professional summaries and job descriptions based on your role (No API Keys required!).
+-   **100% Private & Fast**: Local generation means your data never leaves the browser for AI processing.
 -   **Live Interactive Preview**: Real-time resume preview with mobile-friendly scaling.
 -   **One-Click PDF Export**: Download your resume in high-quality PDF format.
 -   **Admin Dashboard**: Manage users and toggle Pro account status via a secure portal (`/admin`).
