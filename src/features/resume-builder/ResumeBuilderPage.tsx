@@ -7,7 +7,6 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import {
     ArrowLeft,
@@ -17,8 +16,7 @@ import {
     Plus,
     Trash2,
     Loader2,
-    Eye,
-    Maximize2
+    Eye
 } from "lucide-react"
 import { useResume, useUpdateResumeContent } from "@/hooks/useResume"
 import type { ResumeContent, PersonalInfo, Experience, Education } from "@/types/resume"
