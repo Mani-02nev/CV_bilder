@@ -8,6 +8,7 @@ import ResumeBuilderPage from '@/features/resume-builder/ResumeBuilderPage'
 import { CreateResumePage } from '@/features/resume/CreateResumePage'
 import AdminLoginPage from '@/features/admin/AdminLoginPage'
 import AdminDashboardPage from '@/features/admin/AdminDashboardPage'
+import { RequireAdmin } from '@/features/admin/components/RequireAdmin'
 
 import ProfilePage from '@/features/profile/ProfilePage'
 
@@ -29,7 +30,14 @@ function App() {
         {/* Admin Routes */}
         <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />
         <Route path="/admin/login" element={<AdminLoginPage />} />
-        <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
+        <Route
+          path="/admin/dashboard"
+          element={
+            <RequireAdmin>
+              <AdminDashboardPage />
+            </RequireAdmin>
+          }
+        />
       </Routes>
     </>
   )

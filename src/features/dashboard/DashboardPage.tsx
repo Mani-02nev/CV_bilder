@@ -39,6 +39,7 @@ import {
     SheetTrigger,
 } from "@/components/ui/sheet"
 import { useLocation } from "react-router-dom"
+import logo from "@/assets/logo.png"
 
 export default function DashboardPage() {
     const navigate = useNavigate()
@@ -95,9 +96,9 @@ export default function DashboardPage() {
 
     const SidebarContent = () => (
         <div className="flex flex-col h-full">
-            <div className="flex items-center gap-2 font-bold text-xl mb-8">
-                <FileText className="h-6 w-6 text-primary" />
-                <span>KS Resume</span>
+            <div className="flex items-center gap-2 font-bold text-xl mb-8 px-2">
+                <img src={logo} alt="KS RESUME Bilder" className="h-8 w-8 object-contain" />
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70">RESUME Bilder</span>
             </div>
 
             <nav className="space-y-2 flex-1">
@@ -143,7 +144,7 @@ export default function DashboardPage() {
 
             {/* Main Content */}
             <main className="flex-1 overflow-y-auto">
-                <div className="p-8">
+                <div className="max-w-7xl mx-auto p-4 sm:p-8">
                     <header className="flex justify-between items-center mb-8">
                         <div>
                             <h1 className="text-3xl font-bold mb-2">My Resumes</h1>

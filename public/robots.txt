@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ks-resume-bilder.vercel.app/sitemap.xml

@@ -92,7 +92,7 @@ export function AIResumeDemo() {
             </div>
 
             {/* Main content */}
-            <div className="relative z-10 h-full flex flex-col items-center justify-center p-8 space-y-8">
+            <div className="relative z-10 h-full flex flex-col items-center justify-center p-4 sm:p-8 space-y-4 sm:space-y-8">
                 {/* Header */}
                 <motion.div
                     className="text-center space-y-2"
@@ -130,7 +130,7 @@ export function AIResumeDemo() {
                         transition={{ duration: 0.5 }}
                         className="w-full max-w-2xl"
                     >
-                        <div className={`${currentStep.bgColor} border-2 border-primary/20 rounded-2xl p-8 space-y-6 shadow-2xl backdrop-blur-sm`}>
+                        <div className={`${currentStep.bgColor} border-2 border-primary/20 rounded-2xl p-4 sm:p-8 space-y-4 sm:space-y-6 shadow-2xl backdrop-blur-sm`}>
                             {/* Step header */}
                             <div className="flex items-center gap-4">
                                 <motion.div
@@ -143,8 +143,8 @@ export function AIResumeDemo() {
                                 >
                                     <Icon className={`w-8 h-8 ${currentStep.color}`} />
                                 </motion.div>
-                                <div className="flex-1">
-                                    <h3 className="text-xl font-bold">{currentStep.title}</h3>
+                                <div className="flex-1 min-w-0">
+                                    <h3 className="text-lg sm:text-xl font-bold truncate">{currentStep.title}</h3>
                                     <div className="flex items-center gap-2 text-sm text-muted-foreground mt-1">
                                         {isTyping ? (
                                             <>
@@ -221,11 +221,11 @@ export function AIResumeDemo() {
                     ].map((badge, i) => (
                         <motion.div
                             key={i}
-                            className="flex items-center gap-2 px-4 py-2 bg-background/80 backdrop-blur-sm rounded-full border text-sm font-medium"
+                            className="flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-background/80 backdrop-blur-sm rounded-full border text-[10px] sm:text-sm font-medium"
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                         >
-                            <badge.icon className="w-4 h-4 text-primary" />
+                            <badge.icon className="w-3 h-3 sm:w-4 sm:h-4 text-primary" />
                             <span>{badge.text}</span>
                         </motion.div>
                     ))}

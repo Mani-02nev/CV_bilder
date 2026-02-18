@@ -5,6 +5,7 @@ import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Shield, Lock } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'sonner'
 
 export default function AdminLoginPage() {
     const [password, setPassword] = useState('')
@@ -18,10 +19,13 @@ export default function AdminLoginPage() {
         setLoading(true)
 
         try {
-            // Updated to requested password mani02112007
-            if (password === 'mani02112007') {
-                // Store admin session
-                localStorage.setItem('isAdmin', 'true')
+            const adminPassword = import.meta.env.VITE_ADMIN_PASSWORD;
+
+            if (password === adminPassword) {
+                // Store admin session in sessionStorage (expires when tab closes)
+                sessionStorage.setItem('isAdmin', 'true')
+                localStorage.removeItem('isAdmin') // Clear old insecure storage
+                toast.success('Admin access granted')
                 navigate('/admin/dashboard')
             } else {
                 setError('Invalid admin password')
