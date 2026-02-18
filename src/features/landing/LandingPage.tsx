@@ -23,6 +23,9 @@ import { useState, useEffect } from "react"
 import {
     Sheet,
     SheetContent,
+    SheetHeader,
+    SheetTitle,
+    SheetDescription,
     SheetTrigger,
 } from "@/components/ui/sheet"
 import { AIResumeDemo } from "@/components/AIResumeDemo"
@@ -93,7 +96,11 @@ export default function LandingPage() {
                             <SheetTrigger className="md:hidden">
                                 <Menu className="h-6 w-6" />
                             </SheetTrigger>
-                            <SheetContent side="right">
+                            <SheetContent side="right" className="w-[300px] sm:w-[400px]">
+                                <SheetHeader className="sr-only">
+                                    <SheetTitle>Navigation Menu</SheetTitle>
+                                    <SheetDescription>Access different sections of our website.</SheetDescription>
+                                </SheetHeader>
                                 <nav className="flex flex-col gap-6 mt-12">
                                     <a href="#features" className="text-lg font-medium">Features</a>
                                     <a href="#templates" className="text-lg font-medium">Templates</a>
@@ -452,17 +459,17 @@ export default function LandingPage() {
                                     href="https://times-tech-one.vercel.app"
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="flex items-center gap-4 justify-center group/brand hover:opacity-90 transition-all cursor-pointer"
+                                    className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 justify-center group/brand hover:opacity-90 transition-all cursor-pointer"
                                 >
-                                    <div className="w-16 h-16 rounded-2xl bg-white border-2 border-indigo-50 flex items-center justify-center shadow-xl shadow-indigo-500/10 group-hover/brand:scale-105 transition-transform overflow-hidden">
-                                        <img src={companyLogo} className="w-12 h-12 object-contain" alt="Company Logo" />
+                                    <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-white border-2 border-indigo-50 flex items-center justify-center shadow-xl shadow-indigo-500/10 group-hover/brand:scale-105 transition-transform overflow-hidden">
+                                        <img src={companyLogo} className="w-10 h-10 sm:w-12 sm:h-12 object-contain" alt="Company Logo" />
                                     </div>
-                                    <h3 className="text-3xl font-black text-[#0F172A] tracking-tighter">TECH STACK <span className="text-indigo-600 uppercase text-xs tracking-widest ml-1 bg-indigo-50 px-2 py-1 rounded">Solutions</span></h3>
+                                    <h3 className="text-2xl sm:text-3xl font-black text-[#0F172A] tracking-tighter">TECH STACK <span className="text-indigo-600 uppercase text-[10px] sm:text-xs tracking-widest ml-1 bg-indigo-50 px-2 py-1 rounded">Solutions</span></h3>
                                 </a>
                             </div>
 
-                            <div className="w-full max-w-4xl">
-                                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 items-center justify-center opacity-40 grayscale group-hover:grayscale-0 transition-all duration-700">
+                            <div className="w-full max-w-4xl px-4">
+                                <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6 sm:gap-8 items-center justify-center opacity-40 grayscale group-hover:grayscale-0 transition-all duration-700">
                                     <div className="flex flex-col items-center gap-2">
                                         <div className="w-12 h-12 rounded-xl bg-gray-50 flex items-center justify-center"><Sparkles className="w-6 h-6 text-indigo-500" /></div>
                                         <span className="text-[10px] font-bold uppercase tracking-widest">OpenAI API</span>

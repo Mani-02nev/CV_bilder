@@ -57,6 +57,9 @@ import {
 import {
     Dialog,
     DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogDescription,
 } from "@/components/ui/dialog"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
@@ -792,14 +795,16 @@ function UserManagementView({ users, setUsers, setTransactions, loading, onRefre
             {/* Manual Upgrade Dialog */}
             <Dialog open={isUpgradeOpen} onOpenChange={setIsUpgradeOpen}>
                 <DialogContent className="max-w-md border-none rounded-[32px] p-8 shadow-2xl">
+                    <DialogTitle className="sr-only">Upgrade to Pro</DialogTitle>
+                    <DialogDescription className="sr-only">Verify manual payment to unlock premium features for this account.</DialogDescription>
                     <div className="space-y-6">
-                        <div className="text-center space-y-2">
+                        <DialogHeader className="text-center space-y-2 pt-4">
                             <div className="w-16 h-16 bg-indigo-50 rounded-2xl flex items-center justify-center mx-auto text-indigo-600 shadow-sm">
                                 <Crown className="w-8 h-8" />
                             </div>
-                            <h2 className="text-xl font-bold text-[#0F172A]">Upgrade to Pro</h2>
-                            <p className="text-sm text-[#64748B]">Verify manual payment to unlock premium features for this account.</p>
-                        </div>
+                            <DialogTitle className="text-xl font-bold text-[#0F172A]">Upgrade to Pro</DialogTitle>
+                            <DialogDescription className="text-sm text-[#64748B]">Verify manual payment to unlock premium features for this account.</DialogDescription>
+                        </DialogHeader>
 
                         <div className="space-y-4">
                             <div className="space-y-2">
@@ -929,6 +934,8 @@ function UserDetailDialog({ user, open, onOpenChange }: { user: UserData | null,
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="max-w-2xl border-none p-0 rounded-3xl overflow-hidden shadow-2xl">
+                <DialogTitle className="sr-only">User Details Viewer</DialogTitle>
+                <DialogDescription className="sr-only">Detailed view of user profile, analytics, and available security actions.</DialogDescription>
                 {user && (
                     <div className="flex flex-col">
                         <div className="bg-[#0F172A] p-10 text-white relative h-48 overflow-hidden">
@@ -1295,6 +1302,8 @@ function TemplatesView({ templates, setTemplates }: { templates: any[], setTempl
                 }}
             >
                 <DialogContent className="max-w-md border-none rounded-3xl p-8 shadow-2xl">
+                    <DialogTitle className="sr-only">{isEditOpen ? 'Edit Template' : 'Add New Template'}</DialogTitle>
+                    <DialogDescription className="sr-only">Form to manage resume template metadata and core library settings.</DialogDescription>
                     <div className="space-y-6">
                         <div className="text-center space-y-2">
                             <div className={`w-16 h-16 ${templateForm.color} rounded-2xl flex items-center justify-center mx-auto text-white shadow-xl transition-colors duration-500`}>
@@ -1438,6 +1447,8 @@ function VisualStudioModal({ open, onOpenChange, template, onSave }: { open: boo
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="max-w-none w-screen h-screen p-0 border-none rounded-none overflow-hidden bg-white z-[100]">
+                <DialogTitle className="sr-only">Template Visual Studio</DialogTitle>
+                <DialogDescription className="sr-only">Configure and customize resume template layouts and styles.</DialogDescription>
                 <div className="flex h-full">
                     {/* Left Toolbar */}
                     <div className="w-[340px] bg-white border-r border-[#E2E8F0] flex flex-col shrink-0">
