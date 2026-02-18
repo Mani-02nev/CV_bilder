@@ -127,7 +127,7 @@ export default function LandingPage() {
                             transition={{ duration: 0.6 }}
                             className="space-y-6"
                         >
-                            <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-[#0F172A] leading-[1.1]">
+                            <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold tracking-tight text-[#0F172A] leading-[1.1]">
                                 Build Your <span className="text-primary">Dream Resume</span> <br className="hidden md:block" /> with AI in Minutes.
                             </h1>
                             <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
@@ -367,7 +367,7 @@ export default function LandingPage() {
 
                         <div className="grid md:grid-cols-2 gap-8 items-center">
                             {/* Free Card */}
-                            <div className="p-10 rounded-[40px] bg-white border border-gray-100 shadow-sm relative overflow-hidden group">
+                            <div className="p-8 sm:p-10 rounded-[40px] bg-white border border-gray-100 shadow-sm relative overflow-hidden group">
                                 <h3 className="text-lg font-bold text-gray-500 mb-2">Free Starter</h3>
                                 <div className="flex items-baseline mb-8">
                                     <span className="text-5xl font-extrabold">₹0</span>
@@ -385,7 +385,7 @@ export default function LandingPage() {
                             </div>
 
                             {/* Pro Card */}
-                            <div className="p-12 rounded-[40px] bg-[#0F172A] text-white shadow-2xl relative overflow-hidden scale-105 z-10">
+                            <div className="p-8 sm:p-12 rounded-[40px] bg-[#0F172A] text-white shadow-2xl relative overflow-hidden scale-100 sm:scale-105 z-10">
                                 <div className="absolute top-0 right-0 py-1.5 px-6 bg-blue-600 rounded-bl-3xl text-xs font-bold uppercase tracking-widest animate-pulse">Special Offer</div>
                                 <h3 className="text-lg font-bold text-blue-400 mb-2">Pro Advantage</h3>
                                 <div className="flex items-baseline mb-2">
