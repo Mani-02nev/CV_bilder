@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
 import { CheckCircle2, AlertCircle, TrendingUp, Search } from 'lucide-react'
@@ -82,7 +82,7 @@ export function ATSAnalyser({ content }: ATSAnalyserProps) {
         }
 
         // 5. Education Check
-        if (content.education?.length > 0) {
+        if (content.education && content.education.length > 0) {
             results.metrics.education = 100
             results.pros.push("Education background is clear")
         } else {
