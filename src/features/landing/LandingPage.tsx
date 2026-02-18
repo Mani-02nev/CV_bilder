@@ -27,7 +27,7 @@ import {
 } from "@/components/ui/sheet"
 import { AIResumeDemo } from "@/components/AIResumeDemo"
 import logo from "@/assets/logo.png"
-import companyLogo from "@/assets/compeny-logo.png"
+import companyLogo from "@/assets/company-logo.png"
 
 export default function LandingPage() {
     const [isScrolled, setIsScrolled] = useState(false)
@@ -448,12 +448,17 @@ export default function LandingPage() {
                         <div className="flex flex-col items-center text-center space-y-12">
                             <div className="space-y-4">
                                 <h2 className="text-sm font-black uppercase tracking-[0.3em] text-gray-400">Official Product of</h2>
-                                <div className="flex items-center gap-4 justify-center">
-                                    <div className="w-16 h-16 rounded-2xl bg-indigo-600 flex items-center justify-center shadow-xl shadow-indigo-500/20">
-                                        <img src={companyLogo} className="w-10 h-10 object-contain brightness-0 invert" alt="Company Logo" />
+                                <a
+                                    href="https://times-tech-one.vercel.app"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex items-center gap-4 justify-center group/brand hover:opacity-90 transition-all cursor-pointer"
+                                >
+                                    <div className="w-16 h-16 rounded-2xl bg-white border-2 border-indigo-50 flex items-center justify-center shadow-xl shadow-indigo-500/10 group-hover/brand:scale-105 transition-transform overflow-hidden">
+                                        <img src={companyLogo} className="w-12 h-12 object-contain" alt="Company Logo" />
                                     </div>
                                     <h3 className="text-3xl font-black text-[#0F172A] tracking-tighter">TECH STACK <span className="text-indigo-600 uppercase text-xs tracking-widest ml-1 bg-indigo-50 px-2 py-1 rounded">Solutions</span></h3>
-                                </div>
+                                </a>
                             </div>
 
                             <div className="w-full max-w-4xl">
@@ -552,7 +557,13 @@ export default function LandingPage() {
                     <div className="flex flex-col md:flex-row justify-between items-center gap-6 pt-12 border-t border-gray-50">
                         <p className="text-gray-400 text-sm">© {new Date().getFullYear()} KS RESUME Bilder. All rights reserved.</p>
                         <p className="text-gray-400 text-sm flex items-center gap-1">Built with ❤️ for modern professionals</p>
-                        <p className="text-gray-300 text-xs">Product of <a href="https://times-tech-one.vercel.app" target="_blank" className="hover:text-primary">Tech stack</a></p>
+                        <p className="text-gray-400 text-sm flex items-center gap-1.5">
+                            Product of
+                            <a href="https://times-tech-one.vercel.app" target="_blank" className="inline-flex items-center gap-2 px-3 py-1 bg-gray-50 rounded-full hover:bg-gray-100 transition-colors border border-gray-100 group">
+                                <img src={companyLogo} className="w-4 h-4 object-contain grayscale group-hover:grayscale-0 transition-all" alt="Stack" />
+                                <span className="font-bold text-[#0F172A]">Tech stack</span>
+                            </a>
+                        </p>
                     </div>
                 </div>
             </footer>
