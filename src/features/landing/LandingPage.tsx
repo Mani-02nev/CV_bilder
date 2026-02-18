@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/sheet"
 import { AIResumeDemo } from "@/components/AIResumeDemo"
 import logo from "@/assets/logo.png"
+import companyLogo from "@/assets/compeny-logo.png"
 
 export default function LandingPage() {
     const [isScrolled, setIsScrolled] = useState(false)
@@ -449,7 +450,7 @@ export default function LandingPage() {
                                 <h2 className="text-sm font-black uppercase tracking-[0.3em] text-gray-400">Official Product of</h2>
                                 <div className="flex items-center gap-4 justify-center">
                                     <div className="w-16 h-16 rounded-2xl bg-indigo-600 flex items-center justify-center shadow-xl shadow-indigo-500/20">
-                                        <img src={logo} className="w-10 h-10 object-contain brightness-0 invert" alt="Company Logo" />
+                                        <img src={companyLogo} className="w-10 h-10 object-contain brightness-0 invert" alt="Company Logo" />
                                     </div>
                                     <h3 className="text-3xl font-black text-[#0F172A] tracking-tighter">TECH STACK <span className="text-indigo-600 uppercase text-xs tracking-widest ml-1 bg-indigo-50 px-2 py-1 rounded">Solutions</span></h3>
                                 </div>
