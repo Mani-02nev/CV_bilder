@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://kscv.vercel.app/sitemap.xml
+Sitemap: https://cv-bilder.vercel.app/sitemap.xml
