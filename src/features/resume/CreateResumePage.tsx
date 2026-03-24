@@ -7,17 +7,24 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { useCreateResume, useUpdateResumeContent } from '@/hooks/useResume'
-import { ArrowLeft, ArrowRight, Sparkles, GraduationCap, Briefcase } from 'lucide-react'
+import { useCreateResume, useUpdateResumeContent, useResumes } from '@/hooks/useResume'
+import { useProfile } from '@/hooks/useProfile'
+import { ArrowLeft, ArrowRight, Sparkles, GraduationCap, Briefcase, Crown, ExternalLink } from 'lucide-react'
 import { aiService } from '@/services/ai'
 import type { ResumeContent } from '@/types/resume'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 
 export function CreateResumePage() {
     const navigate = useNavigate()
     const createResume = useCreateResume()
     const updateContent = useUpdateResumeContent()
 
+    const { data: resumes } = useResumes()
+    const { data: profile } = useProfile()
+    const isPro = profile?.is_pro || false
+
     const [step, setStep] = useState(1)
+    const [showUpgradeDialog, setShowUpgradeDialog] = useState(false)
     const [selectedTemplate, setSelectedTemplate] = useState<string>('')
     const [isGenerating, setIsGenerating] = useState(false)
     const [isStudent, setIsStudent] = useState(false)
@@ -89,8 +96,8 @@ export function CreateResumePage() {
             return
         }
 
-        if (isStudent && !formData.degree) {
-            alert('Please fill in your degree/course')
+        if (!isPro && resumes && resumes.length >= 1) {
+            setShowUpgradeDialog(true)
             return
         }
 
@@ -638,6 +645,41 @@ export function CreateResumePage() {
                         )}
                     </div>
                 </Card>
+                <Dialog open={showUpgradeDialog} onOpenChange={setShowUpgradeDialog}>
+                    <DialogContent className="sm:max-w-md">
+                        <DialogHeader>
+                            <DialogTitle className="flex items-center gap-2">
+                                <Crown className="w-6 h-6 text-yellow-500 fill-yellow-500" />
+                                Upgrade Your Plan
+                            </DialogTitle>
+                            <DialogDescription className="pt-2 text-base">
+                                You've reached the **1 resume limit** on the Free Plan.
+                            </DialogDescription>
+                        </DialogHeader>
+                        <div className="bg-muted/30 p-4 rounded-lg border border-dashed text-sm space-y-3">
+                            <p className="font-medium text-foreground">Pro Plan Includes:</p>
+                            <ul className="space-y-2">
+                                <li className="flex items-center gap-2">✅ Create Unlimited Resumes</li>
+                                <li className="flex items-center gap-2">✅ 12+ Premium Templates</li>
+                                <li className="flex items-center gap-2">✅ Professional Profile Photos</li>
+                                <li className="flex items-center gap-2">✅ AI Multi-Job Suggestions</li>
+                                <li className="flex items-center gap-2">✅ High Priority Support</li>
+                            </ul>
+                        </div>
+                        <DialogFooter className="flex flex-col sm:flex-row gap-2">
+                            <Button variant="ghost" onClick={() => setShowUpgradeDialog(false)} className="sm:flex-1">
+                                Maybe Later
+                            </Button>
+                            <Button
+                                className="sm:flex-1 bg-yellow-500 hover:bg-yellow-600 text-black font-bold gap-2"
+                                onClick={() => window.open('https://wa.me/918270374293?text=Hi!%20I\'m%20interested%20in%20upgrading%20to%20KS%20Resume%20Bilder%20Pro%20Plan', '_blank')}
+                            >
+                                Upgrade to Pro
+                                <ExternalLink className="w-4 h-4" />
+                            </Button>
+                        </DialogFooter>
+                    </DialogContent>
+                </Dialog>
             </div>
         </div>
     )

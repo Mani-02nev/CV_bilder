@@ -28,7 +28,7 @@ export function TemplateSelector({ onSelect, selectedTemplateId }: TemplateSelec
             toast.error("This is a Premium template. Please upgrade to Pro to use it.", {
                 action: {
                     label: "Upgrade",
-                    onClick: () => window.open('https://wa.me/918270374293?text=Hi!%20I\'m%20interested%20in%20upgrading%20to%20Pro%20plan', '_blank')
+                    onClick: () => window.open('https://wa.me/918270374293?text=Hi!%20I\'m%20interested%20in%20upgrading%20to%20KS%20Resume%20Bilder%20Pro%20Plan', '_blank')
                 }
             })
             return

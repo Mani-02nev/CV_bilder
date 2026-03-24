@@ -12,10 +12,13 @@ import {
     Trash2,
     LogOut,
     User,
-    Menu
+    Menu,
+    Crown,
+    ExternalLink
 } from "lucide-react"
 import { useResumes, useCreateResume, useDeleteResume, useDuplicateResume } from "@/hooks/useResume"
 import { useAuth } from "@/context/AuthContext"
+import { useProfile } from "@/hooks/useProfile"
 import { useState } from "react"
 import {
     DropdownMenu,
@@ -49,8 +52,20 @@ export default function DashboardPage() {
     const deleteResume = useDeleteResume()
     const duplicateResume = useDuplicateResume()
 
+    const { data: profile } = useProfile()
+    const isPro = profile?.is_pro || false
+
     const [showCreateDialog, setShowCreateDialog] = useState(false)
+    const [showUpgradeDialog, setShowUpgradeDialog] = useState(false)
     const [newResumeTitle, setNewResumeTitle] = useState("")
+
+    const handleCreateNewClick = () => {
+        if (!isPro && resumes && resumes.length >= 1) {
+            setShowUpgradeDialog(true)
+            return
+        }
+        navigate('/create-resume')
+    }
 
     const handleCreateResume = async () => {
         if (!newResumeTitle.trim()) return
@@ -164,7 +179,7 @@ export default function DashboardPage() {
                                 </SheetContent>
                             </Sheet>
 
-                            <Button onClick={() => navigate('/create-resume')} size="sm" className="gap-1 sm:gap-2">
+                            <Button onClick={handleCreateNewClick} size="sm" className="gap-1 sm:gap-2">
                                 <Plus className="h-4 w-4 sm:h-5 sm:w-5" />
                                 <span className="hidden sm:inline">Create New Resume</span>
                                 <span className="sm:hidden">New</span>
@@ -216,6 +231,10 @@ export default function DashboardPage() {
                                                         </DropdownMenuItem>
                                                         <DropdownMenuItem onClick={(e) => {
                                                             e.stopPropagation()
+                                                            if (!isPro && resumes && resumes.length >= 1) {
+                                                                setShowUpgradeDialog(true)
+                                                                return
+                                                            }
                                                             handleDuplicate(resume.id)
                                                         }}>
                                                             <Copy className="mr-2 h-4 w-4" />
@@ -257,7 +276,7 @@ export default function DashboardPage() {
                             <p className="text-muted-foreground mb-6">
                                 Create your first professional resume to get started
                             </p>
-                            <Button onClick={() => navigate('/create-resume')} size="lg">
+                            <Button onClick={handleCreateNewClick} size="lg">
                                 <Plus className="mr-2 h-5 w-5" />
                                 Create Your First Resume
                             </Button>
@@ -265,6 +284,43 @@ export default function DashboardPage() {
                     )}
                 </div>
             </main>
+
+            {/* Upgrade Plan Dialog */}
+            <Dialog open={showUpgradeDialog} onOpenChange={setShowUpgradeDialog}>
+                <DialogContent className="sm:max-w-md">
+                    <DialogHeader>
+                        <DialogTitle className="flex items-center gap-2">
+                            <Crown className="w-6 h-6 text-yellow-500 fill-yellow-500" />
+                            Upgrade Your Plan
+                        </DialogTitle>
+                        <DialogDescription className="pt-2 text-base">
+                            You've reached the **1 resume limit** on the Free Plan.
+                        </DialogDescription>
+                    </DialogHeader>
+                    <div className="bg-muted/30 p-4 rounded-lg border border-dashed text-sm space-y-3">
+                        <p className="font-medium text-foreground">Pro Plan Includes:</p>
+                        <ul className="space-y-2">
+                            <li className="flex items-center gap-2">✅ Create Unlimited Resumes</li>
+                            <li className="flex items-center gap-2">✅ 12+ Premium Templates</li>
+                            <li className="flex items-center gap-2">✅ Professional Profile Photos</li>
+                            <li className="flex items-center gap-2">✅ AI Multi-Job Suggestions</li>
+                            <li className="flex items-center gap-2">✅ High Priority Support</li>
+                        </ul>
+                    </div>
+                    <DialogFooter className="flex flex-col sm:flex-row gap-2">
+                        <Button variant="ghost" onClick={() => setShowUpgradeDialog(false)} className="sm:flex-1">
+                            Maybe Later
+                        </Button>
+                        <Button
+                            className="sm:flex-1 bg-yellow-500 hover:bg-yellow-600 text-black font-bold gap-2"
+                            onClick={() => window.open('https://wa.me/918270374293?text=Hi!%20I\'m%20interested%20in%20upgrading%20to%20KS%20Resume%20Bilder%20Pro%20Plan', '_blank')}
+                        >
+                            Upgrade to Pro
+                            <ExternalLink className="w-4 h-4" />
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
 
             {/* Create Resume Dialog */}
             <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
