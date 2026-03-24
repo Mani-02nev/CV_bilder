@@ -88,7 +88,26 @@ export default function ResumeBuilderPage() {
                 pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
             }
 
-            await html2pdf().set(opt).from(element).save()
+            await html2pdf().set(opt).from(element).toPdf().get('pdf').then((pdf: any) => {
+                const totalPages = pdf.internal.getNumberOfPages()
+                for (let i = 1; i <= totalPages; i++) {
+                    pdf.setPage(i)
+                    pdf.setFontSize(11)
+                    
+                    // Set color to #555555
+                    pdf.setTextColor(85, 85, 85)
+                    pdf.setFont("helvetica", "italic")
+                    
+                    const watermarkText = "KS Resume Bilder | cv-bilder.vercel.app"
+                    const textWidth = pdf.getTextWidth(watermarkText)
+                    const pageWidth = pdf.internal.pageSize.getWidth()
+                    const pageHeight = pdf.internal.pageSize.getHeight()
+                    const x = (pageWidth - textWidth) / 2
+                    const y = pageHeight - 8 // 8mm from bottom
+                    
+                    pdf.text(watermarkText, x, y)
+                }
+            }).save()
             toast.success('Resume downloaded successfully!')
         } catch (error) {
             console.error('Failed to download:', error)

@@ -66,25 +66,13 @@ export function ResumeTemplate({ content, templateId }: TemplateProps) {
     return <ModernTemplate content={content} styles={styles} />
 }
 
-function Watermark({ opacity = "0.1" }: { opacity?: string }) {
-    return (
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0 overflow-hidden">
-            <div
-                className="text-[200px] font-bold -rotate-45 select-none whitespace-nowrap text-gray-400"
-                style={{ opacity: opacity }}
-            >
-                KS
-            </div>
-        </div>
-    )
-}
 
 // Modern Template
 function ModernTemplate({ content, styles }: { content: ResumeContent; styles: any }) {
     const primaryColor = styles.primary;
     return (
         <div className="bg-white p-12 min-h-[297mm] font-sans relative overflow-hidden">
-            <Watermark opacity="0.08" />
+            
             <div className="relative z-10">
                 {content.personalInfo && (
                     <div className="mb-8 pb-6 border-b-4" style={{ borderColor: primaryColor }}>
@@ -265,7 +253,7 @@ function ClassicTemplate({ content, styles }: { content: ResumeContent; styles: 
     const primaryColor = styles.primary;
     return (
         <div className="bg-white p-12 min-h-[297mm] font-serif relative overflow-hidden">
-            <Watermark opacity="0.08" />
+            
             <div className="relative z-10">
                 {content.personalInfo && (
                     <div className="text-center mb-8 pb-6 border-b-2" style={{ borderColor: primaryColor }}>
@@ -383,7 +371,7 @@ function ClassicTemplate({ content, styles }: { content: ResumeContent; styles: 
 function MinimalTemplate({ content, styles: _styles }: TemplateSubProps) {
     return (
         <div className="bg-white p-12 min-h-[297mm] font-sans relative overflow-hidden">
-            <Watermark opacity="0.05" />
+            
             <div className="relative z-10">
                 {content.personalInfo && (
                     <div className="mb-10">
@@ -466,7 +454,7 @@ function CreativeTemplate({ content, styles }: { content: ResumeContent; styles:
 
     return (
         <div className="bg-white min-h-[297mm] font-sans relative overflow-hidden">
-            <Watermark opacity="0.05" />
+            
             <div className="relative z-10">
                 {content.personalInfo && (
                     <div className="p-10 text-white" style={headerStyle}>
@@ -548,7 +536,7 @@ function CreativeTemplate({ content, styles }: { content: ResumeContent; styles:
 function ATSTemplate({ content }: TemplateSubProps) {
     return (
         <div className="bg-white p-12 min-h-[297mm] font-sans text-gray-900 relative overflow-hidden">
-            <Watermark opacity="0.1" />
+            
             <div className="relative z-10">
                 {content.personalInfo && (
                     <div className="text-center mb-8 border-b-2 border-black pb-4">

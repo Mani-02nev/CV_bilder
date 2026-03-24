@@ -1,4 +1,3 @@
 User-agent: *
 Allow: /
-
 Sitemap: https://cv-bilder.vercel.app/sitemap.xml
