@@ -88,7 +88,7 @@ export default function ResumeBuilderPage() {
                 pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
             }
 
-            await html2pdf().set(opt).from(element).toPdf().get('pdf').then((pdf: any) => {
+            await (html2pdf() as any).set(opt).from(element).toPdf().get('pdf').then((pdf: any) => {
                 const totalPages = pdf.internal.getNumberOfPages()
                 for (let i = 1; i <= totalPages; i++) {
                     pdf.setPage(i)
