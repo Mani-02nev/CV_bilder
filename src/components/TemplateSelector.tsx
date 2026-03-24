@@ -46,7 +46,7 @@ export function TemplateSelector({ onSelect, selectedTemplateId }: TemplateSelec
                 </p>
                 {!isLoading && !isPro && (
                     <div className="text-sm bg-primary/10 text-primary px-3 py-1 rounded-full inline-block">
-                        Free Plan Active • Upgrade for Premium Templates
+                        Free Plan Active • 6 Free Templates Available
                     </div>
                 )}
             </div>

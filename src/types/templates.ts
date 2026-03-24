@@ -63,7 +63,7 @@ export const RESUME_TEMPLATES: Template[] = [
         preview: '/templates/creative-purple.png',
         category: 'creative',
         color: '#9333EA',
-        isPremium: true
+        isPremium: false
     },
     {
         id: 'tech-startup-cyan',
@@ -108,7 +108,7 @@ export const RESUME_TEMPLATES: Template[] = [
         preview: '/templates/marketing-orange.png',
         category: 'creative',
         color: '#F97316',
-        isPremium: true
+        isPremium: false
     },
     {
         id: 'lawyer-maroon',

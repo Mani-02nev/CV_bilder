@@ -1,4 +1,4 @@
-import { useParams, useNavigate, Link } from "react-router-dom"
+import { useParams, useNavigate } from "react-router-dom"
 import { useState, useEffect, useRef } from "react"
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import { Save, Download, Trash2, Plus, Sparkles, Eye, ChevronLeft, Search, Loader2, Upload, Crown } from 'lucide-react'
+import { Save, Download, Trash2, Plus, Sparkles, Eye, ChevronLeft, Search, Loader2, Upload } from 'lucide-react'
 import { ATSAnalyser } from './components/ATSAnalyser'
 import { useResume, useUpdateResumeContent } from "@/hooks/useResume"
 import type { ResumeContent, PersonalInfo, Experience, Education, Project } from "@/types/resume"
@@ -16,15 +16,14 @@ import { aiService } from "@/services/ai"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { ResumeTemplate } from "@/components/templates/ResumeTemplate"
-import { useProfile } from "@/hooks/useProfile"
-import { Badge } from "@/components/ui/badge"
+
 
 export default function ResumeBuilderPage() {
     const { id } = useParams<{ id: string }>()
     const navigate = useNavigate()
     const { data: resume, isLoading } = useResume(id!)
     const updateContent = useUpdateResumeContent()
-    const { data: profile } = useProfile()
+
 
     const [content, setContent] = useState<ResumeContent>({})
     const [activeTab, setActiveTab] = useState("bio")
@@ -330,47 +329,34 @@ export default function ResumeBuilderPage() {
                                                 ) : (
                                                     <Upload className="w-8 h-8 text-muted-foreground/40" />
                                                 )}
-                                                {!profile?.is_pro && (
-                                                    <div className="absolute inset-0 bg-background/60 backdrop-blur-[1px] flex items-center justify-center cursor-not-allowed">
-                                                        <Crown className="w-6 h-6 text-yellow-500" />
-                                                    </div>
-                                                )}
                                             </div>
-                                            {profile?.is_pro && (
-                                                <Label htmlFor="photo-upload" className="absolute bottom-0 right-0 p-1 bg-primary text-primary-foreground rounded-full cursor-pointer shadow-lg hover:bg-primary/90 transition-colors">
-                                                    <Plus className="w-4 h-4" />
-                                                    <Input
-                                                        id="photo-upload"
-                                                        type="file"
-                                                        className="hidden"
-                                                        accept="image/*"
-                                                        onChange={(e) => {
-                                                            const file = e.target.files?.[0]
-                                                            if (file) {
-                                                                const reader = new FileReader()
-                                                                reader.onloadend = () => {
-                                                                    updatePersonalInfo('profilePicture', reader.result as string)
-                                                                }
-                                                                reader.readAsDataURL(file)
+                                            <Label htmlFor="photo-upload" className="absolute bottom-0 right-0 p-1 bg-primary text-primary-foreground rounded-full cursor-pointer shadow-lg hover:bg-primary/90 transition-colors">
+                                                <Plus className="w-4 h-4" />
+                                                <Input
+                                                    id="photo-upload"
+                                                    type="file"
+                                                    className="hidden"
+                                                    accept="image/*"
+                                                    onChange={(e) => {
+                                                        const file = e.target.files?.[0]
+                                                        if (file) {
+                                                            const reader = new FileReader()
+                                                            reader.onloadend = () => {
+                                                                updatePersonalInfo('profilePicture', reader.result as string)
                                                             }
-                                                        }}
-                                                    />
-                                                </Label>
-                                            )}
+                                                            reader.readAsDataURL(file)
+                                                        }
+                                                    }}
+                                                />
+                                            </Label>
                                         </div>
                                         <div className="flex-1 space-y-2">
                                             <div className="flex items-center gap-2">
                                                 <h4 className="font-bold">Profile Picture</h4>
-                                                {!profile?.is_pro && <Badge variant="secondary" className="bg-yellow-100 text-yellow-800 border-yellow-200">Pro Feature</Badge>}
                                             </div>
                                             <p className="text-xs text-muted-foreground">
-                                                {profile?.is_pro ? "Upload a professional photo to stand out. Max 2MB." : "Upgrade to Pro to add a professional photo to your resume."}
+                                                Upload a professional photo to stand out. Max 2MB.
                                             </p>
-                                            {!profile?.is_pro && (
-                                                <Link to="/auth/signup">
-                                                    <Button variant="link" size="sm" className="p-0 h-auto text-xs text-blue-600">Upgrade to Pro</Button>
-                                                </Link>
-                                            )}
                                         </div>
                                     </div>
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
