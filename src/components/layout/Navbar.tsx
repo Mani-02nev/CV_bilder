@@ -148,7 +148,7 @@ export function Navbar() {
             <>
               <Link
                 to="/dashboard"
-                className="text-sm font-semibold text-indigo-400 hover:text-indigo-300 transition-colors"
+                className="hidden lg:block text-sm font-semibold text-indigo-400 hover:text-indigo-300 transition-colors"
               >
                 Dashboard
               </Link>
@@ -156,7 +156,7 @@ export function Navbar() {
                 variant="ghost"
                 size="sm"
                 onClick={() => signOut()}
-                className="text-sm font-semibold text-slate-300 hover:text-white hover:bg-slate-900/50 rounded-full px-4 h-9"
+                className="hidden lg:inline-flex text-sm font-semibold text-slate-300 hover:text-white hover:bg-slate-900/50 rounded-full px-4 h-9"
               >
                 Sign Out
               </Button>
@@ -165,11 +165,11 @@ export function Navbar() {
             <>
               <Link
                 to="/auth/login"
-                className="hidden sm:block text-sm font-medium text-slate-300 hover:text-white transition-colors"
+                className="hidden lg:block text-sm font-medium text-slate-300 hover:text-white transition-colors"
               >
                 Log in
               </Link>
-              <Link to="/auth/signup">
+              <Link to="/auth/signup" className="hidden lg:block">
                 <Button
                   size="sm"
                   className="bg-indigo-600 hover:bg-indigo-500 text-white rounded-full px-5 py-2 hover:shadow-lg hover:shadow-indigo-500/20 transition-all font-semibold"
