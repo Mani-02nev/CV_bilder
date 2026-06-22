@@ -8,8 +8,8 @@ export default function SEOHead() {
   const params = useParams()
 
   useEffect(() => {
-    let title = "KS Resume Builder | Free AI Resume Builder & ATS CV Generator"
-    let description = "Build a job-winning, recruiter-approved resume in minutes with KS Resume Builder. ATS-optimized templates, AI generator, scoring checker, cover letters, and interview prep."
+    let title = "KS CV-Bilder | Free AI Resume Builder & ATS CV Generator"
+    let description = "Build a job-winning, recruiter-approved resume in minutes with KS CV-Bilder. ATS-optimized templates, AI generator, scoring checker, cover letters, and interview prep."
     let keywords = "AI resume builder, ATS resume builder, resume maker, CV maker online, free resume builder, cover letter generator, interview preparation AI, LinkedIn optimizer, professional resume templates, MR K AI Ecosystem, Karuppasamy M"
     let canonical = `https://mrk02.vercel.app${pathname}`
     let ogImage = "https://mrk02.vercel.app/og-image.png"
@@ -46,15 +46,15 @@ export default function SEOHead() {
     }
 
     if (pathname === '/') {
-      title = "KS Resume Builder | Free AI Resume Builder & ATS CV Generator"
-      description = "Build a job-winning resume in minutes with KS Resume Builder. ATS-optimized templates, AI bullet generator, resume score checker, and cover letters. Try the free CV maker."
+      title = "KS CV-Bilder | Free AI Resume Builder & ATS CV Generator"
+      description = "Build a job-winning resume in minutes with KS CV-Bilder. ATS-optimized templates, AI bullet generator, resume score checker, and cover letters. Try the free CV maker."
       schemaMarkup = {
         "@context": "https://schema.org",
         "@graph": [
           {
             "@context": "https://schema.org",
             "@type": "SoftwareApplication",
-            "name": "KS Resume Builder",
+            "name": "KS CV-Bilder",
             "operatingSystem": "Web Browser",
             "applicationCategory": "BusinessApplication",
             "offers": {
@@ -83,7 +83,7 @@ export default function SEOHead() {
       }
     } else if (pathname === '/about') {
       title = "About MR K AI Ecosystem | Innovation in Career Optimization"
-      description = "Discover the mission, vision, core values, and future AI product roadmap of MR K AI Ecosystem, the company behind the world-class KS Resume Builder platform."
+      description = "Discover the mission, vision, core values, and future AI product roadmap of MR K AI Ecosystem, the company behind the world-class KS CV-Bilder platform."
       schemaMarkup = {
         "@context": "https://schema.org",
         "@graph": [
@@ -101,7 +101,7 @@ export default function SEOHead() {
       const slug = params.slug || pathname.split('/').pop() || ''
       const product = productData[slug]
       if (product) {
-        title = `${product.title} | KS Resume Builder`
+        title = `${product.title} | KS CV-Bilder`
         description = product.description.substring(0, 160)
         keywords = product.keywords.join(', ')
         schemaMarkup = {
@@ -141,12 +141,12 @@ export default function SEOHead() {
         }
       }
     } else if (pathname === '/blog') {
-      title = "Career Advice, Resume Tips & ATS Guides | KS Resume Builder Blog"
+      title = "Career Advice, Resume Tips & ATS Guides | KS CV-Bilder Blog"
       description = "Browse expert-verified resume formats, software engineer CV guides, MNC recruiter tips, and freshers advice. Read 100+ comprehensive career guides."
       schemaMarkup = {
         "@context": "https://schema.org",
         "@type": "Blog",
-        "name": "KS Resume Builder Career Blog",
+        "name": "KS CV-Bilder Career Blog",
         "description": "Expert career guidance and resume writing articles.",
         "publisher": defaultOrgSchema
       }
@@ -154,7 +154,7 @@ export default function SEOHead() {
       const slug = params.slug || pathname.split('/').pop() || ''
       const article = blogArticles[slug]
       if (article) {
-        title = `${article.title} | KS Resume Builder Blog`
+        title = `${article.title} | KS CV-Bilder Blog`
         description = article.summary.substring(0, 160)
         keywords = article.keywords.join(', ')
         schemaMarkup = {
@@ -213,7 +213,7 @@ export default function SEOHead() {
 
     updateOrCreateMeta('description', description)
     updateOrCreateMeta('keywords', keywords)
-    updateOrCreateMeta('author', 'KS Resume Builder')
+    updateOrCreateMeta('author', 'KS CV-Bilder')
     updateOrCreateMeta('og:title', title, true)
     updateOrCreateMeta('og:description', description, true)
     updateOrCreateMeta('og:image', ogImage, true)

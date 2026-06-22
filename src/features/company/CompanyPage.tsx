@@ -27,7 +27,7 @@ export default function CompanyPage() {
   ]
 
   const products = [
-    { title: "KS Resume Builder", status: "Active", desc: "High-fidelity ATS resume optimizer and vector PDF builder." },
+    { title: "KS CV-Bilder", status: "Active", desc: "High-fidelity ATS resume optimizer and vector PDF builder." },
     { title: "Document Intelligence Engine", status: "Beta", desc: "Semantic parsing and analyzer for professional assets." },
     { title: "Smart Code Optimizer", status: "Roadmap", desc: "AI-powered developer utility and prompt accelerator." }
   ]

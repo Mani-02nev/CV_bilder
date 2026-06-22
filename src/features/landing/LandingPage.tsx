@@ -327,14 +327,14 @@ export default function LandingPage() {
           <div className="container mx-auto max-w-4xl">
             <div className="text-center mb-16 space-y-4">
               <span className="text-xs font-bold uppercase tracking-widest text-indigo-400">Head-to-head Comparison</span>
-              <h2 className="text-3xl md:text-5xl font-black">Why KS Resume Builder Stands Out</h2>
+              <h2 className="text-3xl md:text-5xl font-black">Why KS CV-Bilder Stands Out</h2>
             </div>
-            <div className="bg-slate-950 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl">
-              <table className="w-full text-left">
+            <div className="bg-slate-950 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl overflow-x-auto">
+              <table className="w-full text-left min-w-[600px]">
                 <thead>
                   <tr className="border-b border-slate-800">
                     <th className="p-6 text-xs font-bold uppercase tracking-widest text-slate-500">Core Features</th>
-                    <th className="p-6 text-sm font-bold bg-indigo-950/40 text-indigo-400 border-x border-slate-800/80">KS Resume Builder</th>
+                    <th className="p-6 text-sm font-bold bg-indigo-950/40 text-indigo-400 border-x border-slate-800/80">KS CV-Bilder</th>
                     <th className="p-6 text-xs font-bold uppercase tracking-widest text-slate-500">Generic Builders</th>
                   </tr>
                 </thead>
@@ -374,7 +374,7 @@ export default function LandingPage() {
 
             <div className="grid md:grid-cols-3 gap-8">
               {[
-                { name: "Ankit Sharma", role: "SDE-2 @ Google", text: "KS Resume Builder played a crucial role in my Google application. The AI keywords optimizer matches descriptions instantly." },
+                { name: "Ankit Sharma", role: "SDE-2 @ Google", text: "KS CV-Bilder played a crucial role in my Google application. The AI keywords optimizer matches descriptions instantly." },
                 { name: "Priya Venkat", role: "Senior UX Designer", text: "I loved the minimalist template. It passed the ATS checks and recruiter reviews perfectly. Saved me days of formatting." },
                 { name: "Mark Wilson", role: "Product Manager @ Stripe", text: "Structured scoring checklists showed formatting bugs I had ignored for years. Highly recommend this builder." }
               ].map((test, i) => (

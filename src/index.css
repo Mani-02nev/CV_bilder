@@ -207,3 +207,19 @@
 .admin-dark-theme .text-slate-450 {
   color: rgb(148, 163, 184) !important;
 }
+
+/* Marquee Animation for Trust Companies */
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 25s linear infinite;
+}
