@@ -33,9 +33,9 @@ export function Footer() {
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-10 mb-12">
           {/* Logo & Pitch */}
           <div className="col-span-2 space-y-6">
-            <Link to="/" className="flex items-center gap-2 font-bold text-xl text-white group">
-              <img src={logo} alt="KS Logo" className="h-8 w-8 object-contain group-hover:rotate-6 transition-transform" />
-              <span>KS Resume Builder</span>
+            <Link to="/" className="flex items-center gap-2.5 font-bold text-xl text-white group">
+              <img src={logo} alt="KS CV-Bilder Logo" className="h-9 w-9 object-contain group-hover:rotate-6 transition-transform" />
+              <span>KS CV-Bilder</span>
             </Link>
             <p className="text-sm text-slate-400 max-w-xs leading-relaxed">
               Transforming career prospects globally with intelligent, AI-powered parsing, optimization, and content design.
@@ -99,7 +99,7 @@ export function Footer() {
         {/* Footer Bottom */}
         <div className="flex flex-col md:flex-row justify-between items-center gap-6 pt-10 border-t border-slate-900">
           <p className="text-xs text-slate-500">
-            © {currentYear} KS Resume Builder by <span className="text-slate-400 font-medium">Karuppasamy M (Mani)</span>. All rights reserved.
+            © {currentYear} KS CV-Bilder by <span className="text-slate-400 font-medium">Karuppasamy M (Mani)</span>. All rights reserved.
           </p>
 
           {/* Social Profiles */}

@@ -134,8 +134,8 @@ export default function DashboardPage() {
     const SidebarContent = () => (
         <div className="flex flex-col h-full font-sans">
             <div className="flex items-center gap-2.5 font-extrabold text-xl mb-8 px-2">
-                <img src={logo} alt="KS RESUME Bilder" className="h-8 w-8 object-contain" />
-                <span className="text-white">KS RESUME <span className="text-indigo-400 font-medium">Bilder</span></span>
+                <img src={logo} alt="KS CV-Bilder Logo" className="h-9 w-9 object-contain" />
+                <span className="text-white">KS CV-<span className="text-indigo-450 font-medium">Bilder</span></span>
             </div>
 
             <nav className="space-y-1.5 flex-1">

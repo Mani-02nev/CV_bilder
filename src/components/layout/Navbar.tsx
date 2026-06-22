@@ -63,11 +63,11 @@ export function Navbar() {
       <div className="container mx-auto px-6 flex items-center justify-between">
         {/* Brand Logo */}
         <Link to="/" className="flex items-center gap-2.5 group">
-          <div className="relative w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/20 overflow-hidden group-hover:scale-105 transition-transform">
-            <img src={logo} alt="KS Logo" className="w-8 h-8 object-contain" />
+          <div className="relative w-10 h-10 flex items-center justify-center group-hover:scale-105 transition-transform">
+            <img src={logo} alt="KS CV-Bilder Logo" className="w-10 h-10 object-contain" />
           </div>
           <span className="font-extrabold text-xl tracking-tight text-white group-hover:text-indigo-400 transition-colors">
-            KS Resume <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400 font-medium">Builder</span>
+            KS CV-<span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400 font-medium">Bilder</span>
           </span>
         </Link>
 
@@ -192,9 +192,9 @@ export function Navbar() {
                 <SheetTitle>Navigation Menu</SheetTitle>
                 <SheetDescription>Access builder sections and tools</SheetDescription>
               </SheetHeader>
-              <div className="flex items-center gap-2 mb-10 pb-6 border-b border-slate-800">
-                <img src={logo} alt="KS Logo" className="h-8 w-8 object-contain" />
-                <span className="font-extrabold text-lg text-white">KS Resume Builder</span>
+              <div className="flex items-center gap-2.5 mb-10 pb-6 border-b border-slate-800">
+                <img src={logo} alt="KS CV-Bilder Logo" className="h-9 w-9 object-contain" />
+                <span className="font-extrabold text-lg text-white">KS CV-Bilder</span>
               </div>
               <nav className="flex flex-col gap-6">
                 <div className="space-y-3">
