@@ -27,6 +27,7 @@ export default function SignupPage() {
                 email,
                 password,
                 options: {
+                    emailRedirectTo: 'https://cv-bilder.vercel.app/',
                     data: {
                         first_name: firstName,
                         last_name: lastName,
@@ -67,10 +68,10 @@ export default function SignupPage() {
                 </Link>
             </div>
 
-            <Card className="w-full max-w-[420px] bg-slate-950/40 border border-slate-900 text-white backdrop-blur-xl shadow-[0_24px_50px_-12px_rgba(0,0,0,0.7)] rounded-[32px] p-6 sm:p-8 relative z-10">
+            <Card className="w-full max-w-[420px] bg-slate-950/40 border border-slate-900/60 text-white backdrop-blur-xl shadow-[0_24px_50px_-12px_rgba(0,0,0,0.7)] rounded-[32px] p-5 sm:p-8 relative z-10">
                 <CardHeader className="space-y-3 p-0 pb-6 text-center sm:text-left">
                     <div className="flex justify-center sm:justify-start items-center gap-3">
-                        <img src={logo} alt="KS Logo" className="h-8 w-8 object-contain" />
+                        <img src={logo} alt="KS Logo" className="h-8 w-8 object-contain animate-pulse" />
                         <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400">
                             <Sparkles className="w-3 h-3 text-indigo-400" />
                             <span className="text-[9px] font-black uppercase tracking-widest">KS Career Suite</span>
@@ -99,7 +100,7 @@ export default function SignupPage() {
                                     value={firstName}
                                     onChange={(e) => setFirstName(e.target.value)}
                                     required
-                                    className="bg-slate-900/40 border-slate-800 hover:border-slate-700 text-white placeholder-slate-600 focus-visible:ring-indigo-500 focus-visible:ring-offset-slate-950 rounded-xl"
+                                    className="bg-slate-900/40 border-slate-800 hover:border-slate-700 text-white placeholder-slate-650 focus-visible:ring-indigo-500 focus-visible:ring-offset-slate-950 rounded-xl"
                                 />
                             </div>
                             <div className="space-y-2 text-left">
@@ -110,7 +111,7 @@ export default function SignupPage() {
                                     value={lastName}
                                     onChange={(e) => setLastName(e.target.value)}
                                     required
-                                    className="bg-slate-900/40 border-slate-800 hover:border-slate-700 text-white placeholder-slate-600 focus-visible:ring-indigo-500 focus-visible:ring-offset-slate-950 rounded-xl"
+                                    className="bg-slate-900/40 border-slate-800 hover:border-slate-700 text-white placeholder-slate-650 focus-visible:ring-indigo-500 focus-visible:ring-offset-slate-950 rounded-xl"
                                 />
                             </div>
                         </div>
@@ -123,7 +124,7 @@ export default function SignupPage() {
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
-                                className="bg-slate-900/40 border-slate-800 hover:border-slate-700 text-white placeholder-slate-600 focus-visible:ring-indigo-500 focus-visible:ring-offset-slate-950 rounded-xl"
+                                className="bg-slate-900/40 border-slate-800 hover:border-slate-700 text-white placeholder-slate-650 focus-visible:ring-indigo-500 focus-visible:ring-offset-slate-950 rounded-xl"
                             />
                         </div>
                         <div className="space-y-2 text-left">
@@ -135,10 +136,10 @@ export default function SignupPage() {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
-                                className="bg-slate-900/40 border-slate-800 hover:border-slate-700 text-white placeholder-slate-600 focus-visible:ring-indigo-500 focus-visible:ring-offset-slate-950 rounded-xl"
+                                className="bg-slate-900/40 border-slate-800 hover:border-slate-700 text-white placeholder-slate-650 focus-visible:ring-indigo-500 focus-visible:ring-offset-slate-950 rounded-xl"
                             />
                         </div>
-                        <Button type="submit" className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl h-11 border-none transition-all shadow-lg hover:shadow-indigo-500/25 mt-2" disabled={isLoading}>
+                        <Button type="submit" className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl h-11 border-none transition-all shadow-lg hover:shadow-indigo-500/25 mt-4" disabled={isLoading}>
                             {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                             Create Account
                         </Button>

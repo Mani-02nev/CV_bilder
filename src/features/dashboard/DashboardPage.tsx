@@ -14,7 +14,8 @@ import {
     User,
     Menu,
     Crown,
-    ExternalLink
+    ExternalLink,
+    BookOpen
 } from "lucide-react"
 import { useResumes, useCreateResume, useDeleteResume, useDuplicateResume } from "@/hooks/useResume"
 import { useAuth } from "@/context/AuthContext"
@@ -158,6 +159,13 @@ export default function DashboardPage() {
                     <LucideIcons.Crown className="h-4 w-4" />
                     AI Career Suite
                 </button>
+                <Link
+                    to="/blog"
+                    className={`flex items-center gap-2.5 px-3 py-2 rounded-xl transition-all border ${location.pathname.startsWith('/blog') ? 'bg-indigo-600/10 text-indigo-400 font-semibold border-indigo-500/20' : 'text-slate-400 hover:text-white hover:bg-slate-900/50 border-transparent font-medium'}`}
+                >
+                    <BookOpen className="h-4 w-4" />
+                    Career Blog
+                </Link>
                 <Link
                     to="/profile"
                     className={`flex items-center gap-2.5 px-3 py-2 rounded-xl transition-all border ${location.pathname === '/profile' ? 'bg-indigo-600/10 text-indigo-400 font-semibold border-indigo-500/20' : 'text-slate-400 hover:text-white hover:bg-slate-900/50 border-transparent font-medium'}`}

@@ -6,7 +6,6 @@ interface AuthContextType {
     session: Session | null
     user: User | null
     loading: boolean
-    signInWithGoogle: () => Promise<void>
     signOut: () => Promise<void>
 }
 
@@ -14,7 +13,6 @@ const AuthContext = createContext<AuthContextType>({
     session: null,
     user: null,
     loading: true,
-    signInWithGoogle: async () => { },
     signOut: async () => { },
 })
 
@@ -24,11 +22,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        supabase.auth.getSession().then(({ data: { session } }) => {
-            setSession(session)
-            setUser(session?.user ?? null)
-            setLoading(false)
-        })
+        supabase.auth.getSession()
+            .then(({ data: { session }, error }) => {
+                if (error) {
+                    console.warn('Supabase session recovery issue:', error.message)
+                    if (error.message?.includes('Refresh Token')) {
+                        supabase.auth.signOut().catch(() => {})
+                    }
+                }
+                setSession(session)
+                setUser(session?.user ?? null)
+                setLoading(false)
+            })
+            .catch((err) => {
+                console.error('Unhandled getSession error:', err)
+                setLoading(false)
+            })
 
         const {
             data: { subscription },
@@ -41,23 +50,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return () => subscription.unsubscribe()
     }, [])
 
-    const signInWithGoogle = async () => {
-        const { error } = await supabase.auth.signInWithOAuth({
-            provider: 'google',
-            options: {
-                redirectTo: `${window.location.origin}/dashboard`
-            }
-        })
-        if (error) throw error
-    }
-
     const signOut = async () => {
         const { error } = await supabase.auth.signOut()
         if (error) throw error
     }
 
     return (
-        <AuthContext.Provider value={{ session, user, loading, signInWithGoogle, signOut }}>
+        <AuthContext.Provider value={{ session, user, loading, signOut }}>
             {!loading && children}
         </AuthContext.Provider>
     )
