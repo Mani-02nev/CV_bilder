@@ -1,5 +1,5 @@
-import { useParams, useNavigate } from "react-router-dom"
-import { useState, useEffect, useRef } from "react"
+import { useParams, useNavigate, useSearchParams } from "react-router-dom"
+import { useState, useEffect, useRef, useMemo } from "react"
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -21,12 +21,13 @@ import { ResumeTemplate } from "@/components/templates/ResumeTemplate"
 export default function ResumeBuilderPage() {
     const { id } = useParams<{ id: string }>()
     const navigate = useNavigate()
+    const [searchParams] = useSearchParams()
     const { data: resume, isLoading } = useResume(id!)
     const updateContent = useUpdateResumeContent()
 
 
     const [content, setContent] = useState<ResumeContent>({})
-    const [activeTab, setActiveTab] = useState("bio")
+    const [activeTab, setActiveTab] = useState(searchParams.get("tab") || "bio")
     const [showAIDialog, setShowAIDialog] = useState(false)
     const [showMobilePreview, setShowMobilePreview] = useState(false)
     const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200)
@@ -50,6 +51,38 @@ export default function ResumeBuilderPage() {
             setContent(resume.content)
         }
     }, [resume])
+
+    const atsScore = useMemo(() => {
+        let contactInfo = 0
+        if (content.personalInfo?.fullName) contactInfo += 20
+        if (content.personalInfo?.email) contactInfo += 20
+        if (content.personalInfo?.phone) contactInfo += 20
+        if (content.personalInfo?.location) contactInfo += 20
+        if (content.personalInfo?.linkedin) contactInfo += 20
+
+        let summary = 0
+        if (content.summary && content.summary.length > 50) {
+            summary = 100
+        } else if (content.summary) {
+            summary = 50
+        }
+
+        const skillCount = content.skills?.length || 0
+        const skills = Math.min(100, skillCount * 10)
+
+        const expCount = content.experience?.length || 0
+        const experience = Math.min(100, expCount * 30)
+
+        const education = (content.education && content.education.length > 0) ? 100 : 0
+
+        return Math.round(
+            (contactInfo * 0.15) +
+            (summary * 0.15) +
+            (skills * 0.25) +
+            (experience * 0.35) +
+            (education * 0.10)
+        )
+    }, [content])
 
     const handleSave = async () => {
         if (!id) return
@@ -75,7 +108,7 @@ export default function ResumeBuilderPage() {
                 filename: `${resume?.title || 'resume'}.pdf`,
                 image: { type: 'jpeg' as const, quality: 1 },
                 html2canvas: {
-                    scale: 2,
+                    scale: 3,
                     useCORS: true,
                     logging: false,
                     letterRendering: true,
@@ -87,26 +120,7 @@ export default function ResumeBuilderPage() {
                 pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
             }
 
-            await (html2pdf() as any).set(opt).from(element).toPdf().get('pdf').then((pdf: any) => {
-                const totalPages = pdf.internal.getNumberOfPages()
-                for (let i = 1; i <= totalPages; i++) {
-                    pdf.setPage(i)
-                    pdf.setFontSize(11)
-                    
-                    // Set color to #555555
-                    pdf.setTextColor(85, 85, 85)
-                    pdf.setFont("helvetica", "italic")
-                    
-                    const watermarkText = "KS Resume Bilder | cv-bilder.vercel.app"
-                    const textWidth = pdf.getTextWidth(watermarkText)
-                    const pageWidth = pdf.internal.pageSize.getWidth()
-                    const pageHeight = pdf.internal.pageSize.getHeight()
-                    const x = (pageWidth - textWidth) / 2
-                    const y = pageHeight - 8 // 8mm from bottom
-                    
-                    pdf.text(watermarkText, x, y)
-                }
-            }).save()
+            await (html2pdf() as any).set(opt).from(element).save()
             toast.success('Resume downloaded successfully!')
         } catch (error) {
             console.error('Failed to download:', error)
@@ -275,26 +289,56 @@ export default function ResumeBuilderPage() {
     }
 
     return (
-        <div className="flex flex-col h-screen bg-background">
-            <header className="h-16 border-b flex items-center justify-between px-4 sm:px-6 bg-background shrink-0">
+        <div className="flex flex-col h-screen bg-[#030712] text-white">
+            <header className="h-16 border-b border-slate-900 flex items-center justify-between px-4 sm:px-6 bg-[#030712] shrink-0">
                 <div className="flex items-center gap-2 sm:gap-4">
-                    <Button variant="ghost" size="sm" onClick={() => navigate('/dashboard')} className="h-8 px-2">
+                    <Button variant="ghost" size="sm" onClick={() => navigate('/dashboard')} className="h-8 px-2 text-slate-400 hover:text-white hover:bg-slate-900 rounded-xl">
                         <ChevronLeft className="h-4 w-4 sm:mr-2" />
                         <span className="hidden sm:inline">Back</span>
                     </Button>
-                    <Separator orientation="vertical" className="h-6 hidden sm:block" />
-                    <h1 className="text-sm sm:text-lg font-semibold truncate max-w-[150px] sm:max-w-none">{resume.title}</h1>
+                    <Separator orientation="vertical" className="h-6 hidden sm:block bg-slate-900" />
+                    <h1 className="text-sm sm:text-base font-bold truncate max-w-[100px] sm:max-w-xs text-white">{resume.title}</h1>
+                    
+                    <Separator orientation="vertical" className="h-6 hidden sm:block bg-slate-900" />
+                    
+                    {/* Live ATS Score Badge Pill */}
+                    <button
+                        onClick={() => setActiveTab("ats")}
+                        className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold transition-all border ${
+                            atsScore >= 80
+                                ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400 hover:bg-emerald-500/20'
+                                : atsScore >= 60
+                                ? 'bg-amber-500/10 border-amber-500/20 text-amber-500 hover:bg-amber-500/20'
+                                : 'bg-red-500/10 border-red-500/20 text-red-400 hover:bg-red-500/20 animate-pulse'
+                        }`}
+                        title="Click to open ATS optimization report"
+                    >
+                        <span className="relative flex h-2 w-2 shrink-0">
+                            <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
+                                atsScore >= 80 ? 'bg-emerald-400' : atsScore >= 60 ? 'bg-amber-400' : 'bg-red-400'
+                            }`} />
+                            <span className={`relative inline-flex rounded-full h-2 w-2 ${
+                                atsScore >= 80 ? 'bg-emerald-500' : atsScore >= 60 ? 'bg-amber-500' : 'bg-red-500'
+                            }`} />
+                        </span>
+                        <span>ATS: {atsScore}%</span>
+                        {atsScore < 80 && (
+                            <span className="hidden md:inline text-[9px] opacity-75 font-medium border-l border-current/25 pl-1.5">
+                                Improve ⚠️
+                            </span>
+                        )}
+                    </button>
                 </div>
                 <div className="flex gap-2">
-                    <Button variant="outline" size="sm" onClick={() => setShowAIDialog(true)} className="h-8 px-2 sm:px-4">
-                        <Sparkles className="h-4 w-4 sm:mr-2 text-primary" />
+                    <Button variant="outline" size="sm" onClick={() => setShowAIDialog(true)} className="h-8 px-2 sm:px-4 border-slate-800 bg-transparent text-slate-350 hover:bg-slate-900 hover:text-white rounded-xl">
+                        <Sparkles className="h-4 w-4 sm:mr-2 text-indigo-400" />
                         <span className="hidden sm:inline">AI Generate</span>
                     </Button>
-                    <Button variant="outline" size="sm" onClick={handleDownload} disabled={isDownloading} className="h-8 px-2 sm:px-4">
+                    <Button variant="outline" size="sm" onClick={handleDownload} disabled={isDownloading} className="h-8 px-2 sm:px-4 border-slate-800 bg-transparent text-slate-350 hover:bg-slate-900 hover:text-white rounded-xl">
                         {isDownloading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4 sm:mr-2" />}
                         <span className="hidden sm:inline">Download</span>
                     </Button>
-                    <Button size="sm" onClick={handleSave} disabled={updateContent.isPending} className="h-8 px-2 sm:px-4">
+                    <Button size="sm" onClick={handleSave} disabled={updateContent.isPending} className="h-8 px-2 sm:px-4 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl">
                         {updateContent.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4 sm:mr-2" />}
                         <span className="hidden sm:inline">Save</span>
                     </Button>
@@ -302,35 +346,35 @@ export default function ResumeBuilderPage() {
             </header>
 
             <div className="flex flex-col md:flex-row flex-1 overflow-hidden">
-                <div className="w-full md:w-1/2 h-full overflow-y-auto p-4 md:p-6 md:border-r bg-muted/5">
+                <div className="w-full md:w-1/2 h-full overflow-y-auto p-4 md:p-6 md:border-r border-slate-900 bg-slate-950/20">
                     <Tabs value={activeTab} onValueChange={setActiveTab} className="h-auto">
-                        <TabsList className="grid grid-cols-5 gap-1 bg-muted/50 p-1 mb-6">
-                            <TabsTrigger value="bio" className="text-xs sm:text-sm py-2">Bio</TabsTrigger>
-                            <TabsTrigger value="jobs" className="text-xs sm:text-sm py-2">Jobs</TabsTrigger>
-                            <TabsTrigger value="edu" className="text-xs sm:text-sm py-2">Edu</TabsTrigger>
-                            <TabsTrigger value="projects" className="text-xs sm:text-sm py-2">Proj</TabsTrigger>
-                            <TabsTrigger value="ats" className="text-xs sm:text-sm py-2 flex items-center gap-1">
-                                <Search className="w-3 h-3" />
+                        <TabsList className="grid grid-cols-5 gap-1 bg-slate-950 border border-slate-900 p-1 mb-6 rounded-xl">
+                            <TabsTrigger value="bio" className="text-xs sm:text-sm py-2 text-slate-400 data-[state=active]:bg-indigo-600 data-[state=active]:text-white rounded-lg transition-all font-semibold">Bio</TabsTrigger>
+                            <TabsTrigger value="jobs" className="text-xs sm:text-sm py-2 text-slate-400 data-[state=active]:bg-indigo-600 data-[state=active]:text-white rounded-lg transition-all font-semibold">Jobs</TabsTrigger>
+                            <TabsTrigger value="edu" className="text-xs sm:text-sm py-2 text-slate-400 data-[state=active]:bg-indigo-600 data-[state=active]:text-white rounded-lg transition-all font-semibold">Edu</TabsTrigger>
+                            <TabsTrigger value="projects" className="text-xs sm:text-sm py-2 text-slate-400 data-[state=active]:bg-indigo-600 data-[state=active]:text-white rounded-lg transition-all font-semibold">Proj</TabsTrigger>
+                            <TabsTrigger value="ats" className="text-xs sm:text-sm py-2 text-slate-400 data-[state=active]:bg-indigo-600 data-[state=active]:text-white rounded-lg transition-all font-semibold flex items-center justify-center gap-1">
+                                <Search className="w-3.5 h-3.5" />
                                 ATS
                             </TabsTrigger>
                         </TabsList>
 
-                        <TabsContent value="bio" className="space-y-4">
-                            <Card className="shadow-sm">
-                                <CardHeader className="py-3 px-4 flex flex-row items-center justify-between">
-                                    <CardTitle className="text-base">Personal Info</CardTitle>
+                        <TabsContent value="bio" className="space-y-4 text-left">
+                            <Card className="bg-slate-950/40 border-slate-900 shadow-xl rounded-2xl overflow-hidden">
+                                <CardHeader className="py-3 px-4 flex flex-row items-center justify-between border-b border-slate-900 bg-slate-900/10">
+                                    <CardTitle className="text-base font-bold text-white">Personal Info</CardTitle>
                                 </CardHeader>
-                                <CardContent className="space-y-4 text-sm px-4 pb-4">
-                                    <div className="flex flex-col sm:flex-row gap-6 pb-4 border-b">
+                                <CardContent className="space-y-4 text-sm p-5">
+                                    <div className="flex flex-col sm:flex-row gap-6 pb-5 border-b border-slate-900">
                                         <div className="flex-shrink-0 relative group">
-                                            <div className="w-24 h-24 rounded-full bg-muted flex items-center justify-center overflow-hidden border-2 border-dashed border-muted-foreground/20">
+                                            <div className="w-24 h-24 rounded-full bg-slate-900/60 flex items-center justify-center overflow-hidden border-2 border-dashed border-slate-800">
                                                 {content.personalInfo?.profilePicture ? (
                                                     <img src={content.personalInfo.profilePicture} alt="Profile" className="w-full h-full object-cover" />
                                                 ) : (
-                                                    <Upload className="w-8 h-8 text-muted-foreground/40" />
+                                                    <Upload className="w-8 h-8 text-slate-600" />
                                                 )}
                                             </div>
-                                            <Label htmlFor="photo-upload" className="absolute bottom-0 right-0 p-1 bg-primary text-primary-foreground rounded-full cursor-pointer shadow-lg hover:bg-primary/90 transition-colors">
+                                            <Label htmlFor="photo-upload" className="absolute bottom-0 right-0 p-1.5 bg-indigo-600 text-white rounded-full cursor-pointer shadow-lg hover:bg-indigo-500 transition-colors">
                                                 <Plus className="w-4 h-4" />
                                                 <Input
                                                     id="photo-upload"
@@ -352,94 +396,96 @@ export default function ResumeBuilderPage() {
                                         </div>
                                         <div className="flex-1 space-y-2">
                                             <div className="flex items-center gap-2">
-                                                <h4 className="font-bold">Profile Picture</h4>
+                                                <h4 className="font-extrabold text-white text-sm">Profile Picture</h4>
                                             </div>
-                                            <p className="text-xs text-muted-foreground">
+                                            <p className="text-xs text-slate-400">
                                                 Upload a professional photo to stand out. Max 2MB.
                                             </p>
                                         </div>
                                     </div>
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                        <div className="space-y-1.5"><Label>Full Name</Label><Input value={content.personalInfo?.fullName || ""} onChange={(e) => updatePersonalInfo('fullName', e.target.value)} /></div>
-                                        <div className="space-y-1.5"><Label>Email</Label><Input value={content.personalInfo?.email || ""} onChange={(e) => updatePersonalInfo('email', e.target.value)} /></div>
-                                        <div className="space-y-1.5"><Label>Phone</Label><Input value={content.personalInfo?.phone || ""} onChange={(e) => updatePersonalInfo('phone', e.target.value)} /></div>
-                                        <div className="space-y-1.5"><Label>Location</Label><Input value={content.personalInfo?.location || ""} onChange={(e) => updatePersonalInfo('location', e.target.value)} /></div>
+                                        <div className="space-y-1.5"><Label className="text-xs font-semibold text-slate-400">Full Name</Label><Input value={content.personalInfo?.fullName || ""} onChange={(e) => updatePersonalInfo('fullName', e.target.value)} className="bg-slate-900/60 border-slate-850 text-white placeholder-slate-600 focus:border-indigo-500 focus:ring-indigo-500/50 rounded-xl h-10" /></div>
+                                        <div className="space-y-1.5"><Label className="text-xs font-semibold text-slate-400">Email</Label><Input value={content.personalInfo?.email || ""} onChange={(e) => updatePersonalInfo('email', e.target.value)} className="bg-slate-900/60 border-slate-850 text-white placeholder-slate-600 focus:border-indigo-500 focus:ring-indigo-500/50 rounded-xl h-10" /></div>
+                                        <div className="space-y-1.5"><Label className="text-xs font-semibold text-slate-400">Phone</Label><Input value={content.personalInfo?.phone || ""} onChange={(e) => updatePersonalInfo('phone', e.target.value)} className="bg-slate-900/60 border-slate-850 text-white placeholder-slate-600 focus:border-indigo-500 focus:ring-indigo-500/50 rounded-xl h-10" /></div>
+                                        <div className="space-y-1.5"><Label className="text-xs font-semibold text-slate-400">Location</Label><Input value={content.personalInfo?.location || ""} onChange={(e) => updatePersonalInfo('location', e.target.value)} className="bg-slate-900/60 border-slate-850 text-white placeholder-slate-600 focus:border-indigo-500 focus:ring-indigo-500/50 rounded-xl h-10" /></div>
                                     </div>
-                                    <div className="space-y-1.5 pt-2 border-t">
-                                        <Label>Professional Summary</Label>
-                                        <Textarea value={content.summary || ""} onChange={(e) => setContent(prev => ({ ...prev, summary: e.target.value }))} className="min-h-[120px]" />
+                                    <div className="space-y-1.5 pt-4 border-t border-slate-900">
+                                        <Label className="text-xs font-semibold text-slate-400">Professional Summary</Label>
+                                        <Textarea value={content.summary || ""} onChange={(e) => setContent(prev => ({ ...prev, summary: e.target.value }))} className="min-h-[120px] bg-slate-900/60 border-slate-850 text-white placeholder-slate-600 focus:border-indigo-500 focus:ring-indigo-500/50 rounded-xl" />
                                     </div>
-                                    <div className="space-y-1.5 pt-2 border-t">
-                                        <Label>Skills (Comma separated)</Label>
-                                        <Input value={content.skills?.join(', ') || ""} onChange={(e) => setContent(prev => ({ ...prev, skills: e.target.value.split(',').map(s => s.trim()).filter(Boolean) }))} />
+                                    <div className="space-y-1.5 pt-4 border-t border-slate-900">
+                                        <Label className="text-xs font-semibold text-slate-400">Skills (Comma separated)</Label>
+                                        <Input value={content.skills?.join(', ') || ""} onChange={(e) => setContent(prev => ({ ...prev, skills: e.target.value.split(',').map(s => s.trim()).filter(Boolean) }))} className="bg-slate-900/60 border-slate-850 text-white placeholder-slate-600 focus:border-indigo-500 focus:ring-indigo-500/50 rounded-xl h-10" />
                                     </div>
                                 </CardContent>
                             </Card>
                         </TabsContent>
 
-                        <TabsContent value="jobs" className="space-y-4">
-                            <div className="flex justify-between items-center"><h3 className="text-sm font-bold opacity-60">WORK HISTORY</h3><Button onClick={addExperience} size="sm" variant="outline"><Plus className="h-3 w-3 mr-1" /> Add</Button></div>
+                        <TabsContent value="jobs" className="space-y-4 text-left">
+                            <div className="flex justify-between items-center"><h3 className="text-xs font-black text-indigo-400 uppercase tracking-widest">WORK HISTORY</h3><Button onClick={addExperience} size="sm" variant="outline" className="border-slate-800 bg-transparent text-slate-350 hover:bg-slate-900 hover:text-white rounded-xl h-8 px-3"><Plus className="h-3.5 w-3.5 mr-1" /> Add</Button></div>
                             {content.experience?.map((exp) => (
-                                <Card key={exp.id} className="relative">
-                                    <CardContent className="pt-8 px-4 pb-4 space-y-4">
-                                        <Button variant="ghost" size="icon" className="absolute top-2 right-2 h-7 w-7 text-muted-foreground hover:text-destructive" onClick={() => removeExperience(exp.id)}><Trash2 className="h-4 w-4" /></Button>
+                                <Card key={exp.id} className="relative bg-slate-950/40 border-slate-900 shadow-lg rounded-2xl overflow-hidden">
+                                    <CardContent className="pt-8 px-5 pb-5 space-y-4">
+                                        <Button variant="ghost" size="icon" className="absolute top-2 right-2 h-7 w-7 text-slate-400 hover:text-red-400 hover:bg-slate-900 rounded-lg" onClick={() => removeExperience(exp.id)}><Trash2 className="h-4 w-4" /></Button>
                                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                            <div className="space-y-1.5"><Label>Job Title</Label><Input value={exp.title} onChange={(e) => updateExperience(exp.id, "title", e.target.value)} /></div>
-                                            <div className="space-y-1.5"><Label>Company</Label><Input value={exp.company} onChange={(e) => updateExperience(exp.id, "company", e.target.value)} /></div>
-                                            <div className="space-y-1.5"><Label>Start Date</Label><Input value={exp.startDate} onChange={(e) => updateExperience(exp.id, "startDate", e.target.value)} /></div>
-                                            <div className="space-y-1.5"><Label>End Date</Label><Input value={exp.endDate} onChange={(e) => updateExperience(exp.id, "endDate", e.target.value)} /></div>
+                                            <div className="space-y-1.5"><Label className="text-xs font-semibold text-slate-400">Job Title</Label><Input value={exp.title} onChange={(e) => updateExperience(exp.id, "title", e.target.value)} className="bg-slate-900/60 border-slate-850 text-white focus:border-indigo-500 focus:ring-indigo-500/50 rounded-xl h-10" /></div>
+                                            <div className="space-y-1.5"><Label className="text-xs font-semibold text-slate-400">Company</Label><Input value={exp.company} onChange={(e) => updateExperience(exp.id, "company", e.target.value)} className="bg-slate-900/60 border-slate-850 text-white focus:border-indigo-500 focus:ring-indigo-500/50 rounded-xl h-10" /></div>
+                                            <div className="space-y-1.5"><Label className="text-xs font-semibold text-slate-400">Start Date</Label><Input value={exp.startDate} onChange={(e) => updateExperience(exp.id, "startDate", e.target.value)} className="bg-slate-900/60 border-slate-850 text-white focus:border-indigo-500 focus:ring-indigo-500/50 rounded-xl h-10" /></div>
+                                            <div className="space-y-1.5"><Label className="text-xs font-semibold text-slate-400">End Date</Label><Input value={exp.endDate} onChange={(e) => updateExperience(exp.id, "endDate", e.target.value)} className="bg-slate-900/60 border-slate-850 text-white focus:border-indigo-500 focus:ring-indigo-500/50 rounded-xl h-10" /></div>
                                         </div>
-                                        <div className="space-y-1.5"><Label>Responsibilities (one per line)</Label><Textarea value={exp.description.join("\n")} onChange={(e) => updateExperience(exp.id, "description", e.target.value.split("\n"))} /></div>
+                                        <div className="space-y-1.5"><Label className="text-xs font-semibold text-slate-400">Responsibilities (one per line)</Label><Textarea value={exp.description.join("\n")} onChange={(e) => updateExperience(exp.id, "description", e.target.value.split("\n"))} rows={4} className="bg-slate-900/60 border-slate-850 text-white focus:border-indigo-500 focus:ring-indigo-500/50 rounded-xl" /></div>
                                     </CardContent>
                                 </Card>
                             ))}
                         </TabsContent>
 
-                        <TabsContent value="edu" className="space-y-4">
-                            <div className="flex justify-between items-center"><h3 className="text-sm font-bold opacity-60">EDUCATION</h3><Button onClick={addEducation} size="sm" variant="outline"><Plus className="h-3 w-3 mr-1" /> Add</Button></div>
+                        <TabsContent value="edu" className="space-y-4 text-left">
+                            <div className="flex justify-between items-center"><h3 className="text-xs font-black text-indigo-400 uppercase tracking-widest">EDUCATION</h3><Button onClick={addEducation} size="sm" variant="outline" className="border-slate-800 bg-transparent text-slate-350 hover:bg-slate-900 hover:text-white rounded-xl h-8 px-3"><Plus className="h-3.5 w-3.5 mr-1" /> Add</Button></div>
                             {content.education?.map((edu) => (
-                                <Card key={edu.id} className="relative">
-                                    <CardContent className="pt-8 px-4 pb-4 space-y-4">
-                                        <Button variant="ghost" size="icon" className="absolute top-2 right-2 h-7 w-7 text-muted-foreground hover:text-destructive" onClick={() => removeEducation(edu.id)}><Trash2 className="h-4 w-4" /></Button>
+                                <Card key={edu.id} className="relative bg-slate-950/40 border-slate-900 shadow-lg rounded-2xl overflow-hidden">
+                                    <CardContent className="pt-8 px-5 pb-5 space-y-4">
+                                        <Button variant="ghost" size="icon" className="absolute top-2 right-2 h-7 w-7 text-slate-400 hover:text-red-400 hover:bg-slate-900 rounded-lg" onClick={() => removeEducation(edu.id)}><Trash2 className="h-4 w-4" /></Button>
                                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                            <div className="space-y-1.5"><Label>Degree</Label><Input value={edu.degree} onChange={(e) => updateEducation(edu.id, "degree", e.target.value)} /></div>
-                                            <div className="space-y-1.5"><Label>Institution</Label><Input value={edu.institution} onChange={(e) => updateEducation(edu.id, "institution", e.target.value)} /></div>
-                                            <div className="space-y-1.5"><Label>Start Date</Label><Input value={edu.startDate} onChange={(e) => updateEducation(edu.id, "startDate", e.target.value)} /></div>
-                                            <div className="space-y-1.5"><Label>End Date</Label><Input value={edu.endDate} onChange={(e) => updateEducation(edu.id, "endDate", e.target.value)} /></div>
+                                            <div className="space-y-1.5"><Label className="text-xs font-semibold text-slate-400">Degree</Label><Input value={edu.degree} onChange={(e) => updateEducation(edu.id, "degree", e.target.value)} className="bg-slate-900/60 border-slate-850 text-white focus:border-indigo-500 focus:ring-indigo-500/50 rounded-xl h-10" /></div>
+                                            <div className="space-y-1.5"><Label className="text-xs font-semibold text-slate-400">Institution</Label><Input value={edu.institution} onChange={(e) => updateEducation(edu.id, "institution", e.target.value)} className="bg-slate-900/60 border-slate-850 text-white focus:border-indigo-500 focus:ring-indigo-500/50 rounded-xl h-10" /></div>
+                                            <div className="space-y-1.5"><Label className="text-xs font-semibold text-slate-400">Start Date</Label><Input value={edu.startDate} onChange={(e) => updateEducation(edu.id, "startDate", e.target.value)} className="bg-slate-900/60 border-slate-850 text-white focus:border-indigo-500 focus:ring-indigo-500/50 rounded-xl h-10" /></div>
+                                            <div className="space-y-1.5"><Label className="text-xs font-semibold text-slate-400">End Date</Label><Input value={edu.endDate} onChange={(e) => updateEducation(edu.id, "endDate", e.target.value)} className="bg-slate-900/60 border-slate-850 text-white focus:border-indigo-500 focus:ring-indigo-500/50 rounded-xl h-10" /></div>
                                         </div>
                                     </CardContent>
                                 </Card>
                             ))}
                         </TabsContent>
 
-                        <TabsContent value="projects" className="space-y-4">
-                            <div className="flex justify-between items-center"><h3 className="text-sm font-bold opacity-60">PROJECTS</h3><Button onClick={addProject} size="sm" variant="outline"><Plus className="h-3 w-3 mr-1" /> Add</Button></div>
+                        <TabsContent value="projects" className="space-y-4 text-left">
+                            <div className="flex justify-between items-center"><h3 className="text-xs font-black text-indigo-400 uppercase tracking-widest">PROJECTS</h3><Button onClick={addProject} size="sm" variant="outline" className="border-slate-800 bg-transparent text-slate-350 hover:bg-slate-900 hover:text-white rounded-xl h-8 px-3"><Plus className="h-3.5 w-3.5 mr-1" /> Add</Button></div>
                             {content.projects?.map((proj) => (
-                                <Card key={proj.id} className="relative">
-                                    <CardContent className="pt-8 px-4 pb-4 space-y-4">
-                                        <Button variant="ghost" size="icon" className="absolute top-2 right-2 h-7 w-7 text-muted-foreground hover:text-destructive" onClick={() => removeProject(proj.id)}><Trash2 className="h-4 w-4" /></Button>
-                                        <div className="space-y-1.5"><Label>Project Name</Label><Input value={proj.name} onChange={(e) => updateProject(proj.id, "name", e.target.value)} /></div>
-                                        <div className="space-y-1.5"><Label>Description</Label><Textarea value={proj.description} onChange={(e) => updateProject(proj.id, "description", e.target.value)} /></div>
-                                        <div className="space-y-1.5"><Label>Tech Stack (Comma separated)</Label><Input value={proj.technologies?.join(', ') || ""} onChange={(e) => updateProject(proj.id, "technologies", e.target.value.split(',').map(s => s.trim()).filter(Boolean))} /></div>
+                                <Card key={proj.id} className="relative bg-slate-950/40 border-slate-900 shadow-lg rounded-2xl overflow-hidden">
+                                    <CardContent className="pt-8 px-5 pb-5 space-y-4">
+                                        <Button variant="ghost" size="icon" className="absolute top-2 right-2 h-7 w-7 text-slate-400 hover:text-red-400 hover:bg-slate-900 rounded-lg" onClick={() => removeProject(proj.id)}><Trash2 className="h-4 w-4" /></Button>
+                                        <div className="space-y-1.5"><Label className="text-xs font-semibold text-slate-400">Project Name</Label><Input value={proj.name} onChange={(e) => updateProject(proj.id, "name", e.target.value)} className="bg-slate-900/60 border-slate-850 text-white focus:border-indigo-500 focus:ring-indigo-500/50 rounded-xl h-10" /></div>
+                                        <div className="space-y-1.5"><Label className="text-xs font-semibold text-slate-400">Description</Label><Textarea value={proj.description} onChange={(e) => updateProject(proj.id, "description", e.target.value)} rows={3} className="bg-slate-900/60 border-slate-850 text-white focus:border-indigo-500 focus:ring-indigo-500/50 rounded-xl" /></div>
+                                        <div className="space-y-1.5"><Label className="text-xs font-semibold text-slate-400">Tech Stack (Comma separated)</Label><Input value={proj.technologies?.join(', ') || ""} onChange={(e) => updateProject(proj.id, "technologies", e.target.value.split(',').map(s => s.trim()).filter(Boolean))} className="bg-slate-900/60 border-slate-850 text-white focus:border-indigo-500 focus:ring-indigo-500/50 rounded-xl h-10" /></div>
                                     </CardContent>
                                 </Card>
                             ))}
                         </TabsContent>
 
                         <TabsContent value="ats" className="m-0 focus-visible:outline-none">
-                            <ATSAnalyser content={content} />
+                            <ATSAnalyser content={content} onUpdateContent={setContent} />
                         </TabsContent>
                     </Tabs>
                 </div>
 
-                <div className="hidden md:flex w-1/2 bg-muted/20 overflow-auto flex-col items-center py-10 px-4">
-                    <div className="sticky top-0 mb-4 bg-background/80 backdrop-blur-sm px-3 py-1.5 rounded-full border shadow-sm z-10 flex items-center gap-2">
-                        <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">A4 Preview</span>
+                <div className="hidden md:flex w-1/2 bg-[#020617] overflow-auto flex-col items-center py-10 px-4 border-l border-slate-900">
+                    <div className="sticky top-0 mb-4 bg-slate-950/80 backdrop-blur-sm px-4 py-1.5 rounded-full border border-slate-900 shadow-xl z-10 flex items-center gap-2">
+                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">A4 Live Preview</span>
                     </div>
                     <div className="w-full flex justify-center py-4">
-                        <div className="w-[210mm] shadow-2xl bg-white origin-top" style={{ transform: 'scale(0.75)', transformOrigin: 'top center' }}>
-                            <div ref={resumeRef} className="w-full">
-                                <ResumeTemplate content={content} templateId={resume?.template_id || 'modern-blue'} />
+                        <div className="w-[calc(210mm*0.72)] h-[calc(297mm*0.72)] overflow-hidden shadow-2xl bg-white rounded-lg relative">
+                            <div className="w-[210mm] h-[297mm] origin-top-left" style={{ transform: 'scale(0.72)', transformOrigin: 'top left' }}>
+                                <div ref={resumeRef} className="w-full text-black min-h-[297mm]">
+                                    <ResumeTemplate content={content} templateId={resume?.template_id || 'modern-blue'} />
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -447,52 +493,69 @@ export default function ResumeBuilderPage() {
             </div>
 
             <Dialog open={showAIDialog} onOpenChange={setShowAIDialog}>
-                <DialogContent>
+                <DialogContent className="bg-slate-950 border-slate-900 text-white">
                     <DialogHeader>
-                        <DialogTitle className="flex items-center gap-2"><Sparkles className="h-5 w-5 text-primary" /> AI Content Generator</DialogTitle>
-                        <DialogDescription>Generate tailored resume content using AI.</DialogDescription>
+                        <DialogTitle className="flex items-center gap-2 text-xl font-bold"><Sparkles className="h-5 w-5 text-indigo-400" /> AI Content Generator</DialogTitle>
+                        <DialogDescription className="text-slate-450 text-sm">Generate tailored resume content using AI.</DialogDescription>
                     </DialogHeader>
-                    <div className="space-y-4 py-4">
-                        <div className="space-y-2"><Label>Job Title</Label><Input value={aiParams.jobTitle} onChange={(e) => setAiParams(p => ({ ...p, jobTitle: e.target.value }))} placeholder="e.g. Frontend Engineer" /></div>
-                        <div className="space-y-2"><Label>Industry</Label><Input value={aiParams.industry} onChange={(e) => setAiParams(p => ({ ...p, industry: e.target.value }))} placeholder="e.g. Technology" /></div>
+                    <div className="space-y-4 py-4 text-left">
+                        <div className="space-y-2"><Label className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Job Title</Label><Input value={aiParams.jobTitle} onChange={(e) => setAiParams(p => ({ ...p, jobTitle: e.target.value }))} placeholder="e.g. Frontend Engineer" className="bg-slate-900/60 border-slate-800 text-white placeholder-slate-600 focus:border-indigo-500 focus:ring-indigo-500/50 rounded-xl h-10" /></div>
+                        <div className="space-y-2"><Label className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Industry</Label><Input value={aiParams.industry} onChange={(e) => setAiParams(p => ({ ...p, industry: e.target.value }))} placeholder="e.g. Technology" className="bg-slate-900/60 border-slate-800 text-white placeholder-slate-600 focus:border-indigo-500 focus:ring-indigo-500/50 rounded-xl h-10" /></div>
                         <div className="space-y-2">
-                            <Label>Experience Level</Label>
+                            <Label className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Experience Level</Label>
                             <Select value={aiParams.experienceLevel} onValueChange={(v) => setAiParams(p => ({ ...p, experienceLevel: v }))}>
-                                <SelectTrigger><SelectValue /></SelectTrigger>
-                                <SelectContent><SelectItem value="entry">Entry</SelectItem><SelectItem value="mid">Mid</SelectItem><SelectItem value="senior">Senior</SelectItem></SelectContent>
+                                <SelectTrigger className="bg-slate-900/60 border-slate-800 text-white focus:ring-indigo-500/50 focus:border-indigo-500 rounded-xl h-10"><SelectValue /></SelectTrigger>
+                                <SelectContent className="bg-slate-950 border-slate-900 text-white">
+                                    <SelectItem value="entry" className="hover:bg-slate-900 cursor-pointer">Entry</SelectItem>
+                                    <SelectItem value="mid" className="hover:bg-slate-900 cursor-pointer">Mid</SelectItem>
+                                    <SelectItem value="senior" className="hover:bg-slate-900 cursor-pointer">Senior</SelectItem>
+                                </SelectContent>
                             </Select>
                         </div>
                     </div>
                     <DialogFooter>
-                        <Button variant="outline" onClick={() => setShowAIDialog(false)}>Cancel</Button>
-                        <Button onClick={handleAIGenerate} disabled={isGenerating}>{isGenerating ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Sparkles className="h-4 w-4 mr-2" />} Generate</Button>
+                        <Button variant="outline" onClick={() => setShowAIDialog(false)} className="border-slate-800 bg-transparent text-slate-400 hover:bg-slate-900 hover:text-white rounded-xl">Cancel</Button>
+                        <Button onClick={handleAIGenerate} disabled={isGenerating} className="bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl">{isGenerating ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Sparkles className="h-4 w-4 mr-2" />} Generate</Button>
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
 
             <Dialog open={showMobilePreview} onOpenChange={setShowMobilePreview}>
-                <DialogContent className="max-w-[100vw] w-screen h-[100vh] p-0 border-none m-0 rounded-none overflow-hidden">
-                    <div className="flex flex-col h-full bg-muted/10">
-                        <div className="h-14 border-b bg-background flex items-center justify-between px-4 shrink-0">
-                            <span className="font-bold">Preview</span>
-                            <Button variant="ghost" size="sm" onClick={() => setShowMobilePreview(false)}>Close</Button>
+                <DialogContent className="max-w-[100vw] w-screen h-[100vh] p-0 border-none m-0 rounded-none overflow-hidden bg-[#030712]">
+                    <div className="flex flex-col h-full bg-[#030712] text-white">
+                        <div className="h-14 border-b border-slate-900 bg-[#030712] flex items-center justify-between px-4 shrink-0">
+                            <span className="font-extrabold text-sm text-white">A4 PDF Preview</span>
+                            <Button variant="ghost" size="sm" onClick={() => setShowMobilePreview(false)} className="text-slate-400 hover:text-white hover:bg-slate-900 rounded-lg">Close</Button>
                         </div>
-                        <div className="flex-1 overflow-auto p-4">
+                        <div className="flex-1 overflow-auto p-4 bg-slate-950/40">
                             <div className="w-full flex justify-center">
-                                <div className="bg-white shadow-2xl origin-top" style={{ width: '210mm', transform: `scale(${(windowWidth - 32) / 794})`, transformOrigin: 'top center' }}>
-                                    <ResumeTemplate content={content} templateId={resume?.template_id || 'modern-blue'} />
-                                </div>
+                                {(() => {
+                                    const mobileScale = (windowWidth - 32) / 794;
+                                    return (
+                                        <div 
+                                            style={{ width: `${210 * mobileScale}mm`, height: `${297 * mobileScale}mm` }} 
+                                            className="overflow-hidden bg-white text-black shadow-2xl rounded-lg relative"
+                                        >
+                                            <div 
+                                                style={{ width: '210mm', height: '297mm', transform: `scale(${mobileScale})`, transformOrigin: 'top left' }}
+                                                className="origin-top-left"
+                                            >
+                                                <ResumeTemplate content={content} templateId={resume?.template_id || 'modern-blue'} />
+                                            </div>
+                                        </div>
+                                    );
+                                })()}
                             </div>
                         </div>
-                        <div className="h-20 border-t bg-background flex items-center p-4">
-                            <Button className="w-full gap-2 h-12" onClick={handleDownload} disabled={isDownloading}>{isDownloading ? <Loader2 className="h-5 w-5 animate-spin" /> : <Download className="h-5 w-5" />} Download PDF</Button>
+                        <div className="h-20 border-t border-slate-900 bg-[#030712] flex items-center p-4">
+                            <Button className="w-full gap-2 h-12 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl shadow-lg shadow-indigo-600/20" onClick={handleDownload} disabled={isDownloading}>{isDownloading ? <Loader2 className="h-5 w-5 animate-spin" /> : <Download className="h-5 w-5" />} Download PDF</Button>
                         </div>
                     </div>
                 </DialogContent>
             </Dialog>
 
             {windowWidth < 768 && !showMobilePreview && (
-                <Button className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-2xl z-50 p-0" onClick={() => setShowMobilePreview(true)}>
+                <Button className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-2xl z-50 p-0 bg-indigo-600 hover:bg-indigo-500 text-white shadow-indigo-600/30" onClick={() => setShowMobilePreview(true)}>
                     <Eye className="h-6 w-6" />
                 </Button>
             )}

@@ -1,0 +1,51 @@
+# KS Resume Builder by MR K AI Ecosystem
+
+Welcome to the official developer and AI-readable documentation directory for the KS Resume Builder, a product of MR K AI Ecosystem.
+
+---
+
+## Brand Information
+- **Brand Name:** KS Resume Builder
+- **Parent Company:** MR K AI Ecosystem
+- **Founder & CEO:** Karuppasamy M (Mani)
+- **Official Domain:** https://mrk02.vercel.app
+
+---
+
+## Platform Summary
+KS Resume Builder is a premium career generation platform engineered to construct ATS-optimized, high-fidelity resume profiles. By generating single-column XML schemas, crisp vector fonts, and metrics-heavy content matching recruiter searches, it maximizes hiring response rates.
+
+---
+
+## AI-Readable Documentation Files
+For complete documentation, prompts, database structures, and detailed content guides, read:
+- **Primary LLM Portal:** [llms.txt](https://mrk02.vercel.app/llms.txt)
+- **Deep Specifications:** [llms-full.txt](https://mrk02.vercel.app/llms-full.txt)
+
+---
+
+## Navigation & URL Routing Index
+Below is the search-crawl map for the platform:
+- **Landing Homepage:** `/` (Hero, builder demo, templates selector, pricing tiers)
+- **Ecosystem About:** `/about` (Company details, product roadmap, future expansion, contact form)
+- **Meet the Founder:** `/founder` (Karuppasamy M biography, career timeline, achievements)
+- **Career guides:** `/blog` (Index of 100+ categories and topics)
+- **Blog Article Reader:** `/blog/:slug` (Individual guide pages)
+- **Dedicated Product Directories:**
+  - AI Resume Builder: `/products/resume-builder`
+  - ATS Resume Checker: `/products/ats-checker`
+  - Resume Score Checker: `/products/resume-score`
+  - Resume Analyzer: `/products/resume-analyzer`
+  - Resume Templates Directory: `/products/resume-templates`
+  - AI Cover Letter Generator: `/products/cover-letter`
+  - Mock Interview Trainer: `/products/interview-prep`
+  - LinkedIn Profile Optimizer: `/products/linkedin-optimizer`
+  - Career Coach Advisor: `/products/career-coach`
+  - Resume Examples: `/products/resume-examples`
+
+---
+
+## Core Technologies
+- **Client Frontend:** Vite React, TypeScript, TailwindCSS, Framer Motion
+- **Database Backend:** Supabase (PostgreSQL), Edge SQL Connect
+- **AI Integrations:** OpenAI, Custom NLP Keyword Extractors

@@ -1,7 +1,16 @@
+import type { ResumeContent } from '@/types/resume'
+
 export interface ResumeGenerationParams {
     jobTitle: string
     industry: string
     experienceLevel: string
+}
+
+export interface OptimizeResumeParams {
+    companyName: string
+    jobTitle: string
+    jobDescription: string
+    currentContent: ResumeContent
 }
 
 export interface GeneratedResumeData {
@@ -93,5 +102,55 @@ export const aiService = {
         const result = generateProfessionalContent(params)
         console.log('✅ Professional content generated successfully!')
         return result
+    },
+
+    optimizeForCompany: async (params: OptimizeResumeParams): Promise<ResumeContent> => {
+        console.log('✨ Optimizing resume content for target company locally...')
+        const { companyName, jobTitle, jobDescription, currentContent } = params
+        
+        // Extract keywords from job description
+        const sampleKeywords = [
+            'React', 'TypeScript', 'Node.js', 'Scalable Systems', 'Team Leadership', 
+            'REST APIs', 'Cloud Computing', 'System Design', 'Agile Methodology', 'CI/CD',
+            'PostgreSQL', 'Vite', 'TailwindCSS', 'Testing', 'Python', 'AWS', 'Docker'
+        ]
+        const extractedSkills = sampleKeywords.filter(keyword => 
+            jobDescription.toLowerCase().includes(keyword.toLowerCase())
+        )
+        if (extractedSkills.length === 0) {
+            extractedSkills.push('Project Management', 'Communication', 'Technical Leadership', 'Strategic Planning')
+        }
+
+        // 1. Rewrite Professional Summary
+        const optimizedSummary = `Results-driven and highly motivated ${jobTitle} with a proven track record of delivering scalable solutions. Seeking to leverage deep expertise in modern engineering practices and collaborative problem-solving to drive strategic initiatives at ${companyName}. Dedicated to aligning technical output with the requirements of the ${jobTitle} role.`
+
+        // 2. Combine skills
+        const existingSkills = currentContent.skills || []
+        const combinedSkills = Array.from(new Set([...existingSkills, ...extractedSkills]))
+
+        // 3. Optimize Experience bullets to align with the company & title keywords
+        const optimizedExperience = (currentContent.experience || []).map((exp, idx) => {
+            if (idx === 0) {
+                const existingDesc = exp.description || []
+                const addedBullets = [
+                    `Aligned development workflow and team objectives with target performance deliverables expected for the ${jobTitle} position at ${companyName}`,
+                    `Spearheaded implementation of modern tech stack elements including ${extractedSkills.slice(0, 3).join(', ')} to boost project efficiency`
+                ]
+                return {
+                    ...exp,
+                    title: jobTitle,
+                    description: [...addedBullets, ...existingDesc].slice(0, 5)
+                }
+            }
+            return exp
+        })
+
+        console.log('✅ Resume tailored successfully for ' + companyName)
+        return {
+            ...currentContent,
+            summary: optimizedSummary,
+            skills: combinedSkills,
+            experience: optimizedExperience
+        }
     }
 }

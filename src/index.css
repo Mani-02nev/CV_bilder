@@ -104,3 +104,106 @@
   font-variant-ligatures: none;
   -webkit-font-smoothing: antialiased;
 }
+
+/* Admin Dark Theme Overrides */
+.admin-dark-theme {
+  --background: 224 71% 4%; /* #030712 */
+  --foreground: 210 40% 98%;
+  --card: 222.2 84% 4.9%;
+  --card-foreground: 210 40% 98%;
+  --popover: 222.2 84% 4.9%;
+  --popover-foreground: 210 40% 98%;
+  --primary: 210 40% 98%;
+  --primary-foreground: 222.2 47.4% 11.2%;
+  --secondary: 217.2 32.6% 17.5%;
+  --secondary-foreground: 210 40% 98%;
+  --muted: 217.2 32.6% 17.5%;
+  --muted-foreground: 215 20.2% 65.1%;
+  --accent: 217.2 32.6% 17.5%;
+  --accent-foreground: 210 40% 98%;
+  --border: 217.2 32.6% 17.5%;
+  --input: 217.2 32.6% 17.5%;
+  --ring: 212.7 26.8% 83.9%;
+  background-color: #030712 !important;
+}
+
+.admin-dark-theme .bg-white {
+  background-color: rgba(15, 23, 42, 0.4) !important;
+  backdrop-filter: blur(12px) !important;
+}
+
+.admin-dark-theme .bg-\[\#F8F9FB\] {
+  background-color: #030712 !important;
+}
+
+.admin-dark-theme .bg-gray-50,
+.admin-dark-theme .bg-slate-50 {
+  background-color: rgba(15, 23, 42, 0.6) !important;
+}
+
+.admin-dark-theme .bg-gray-100 {
+  background-color: rgba(30, 41, 59, 0.6) !important;
+}
+
+.admin-dark-theme .border-gray-50,
+.admin-dark-theme .border-\[\#E2E8F0\],
+.admin-dark-theme .border-slate-100,
+.admin-dark-theme .border-slate-200 {
+  border-color: rgba(30, 41, 59, 0.8) !important;
+}
+
+.admin-dark-theme .text-\[\#0F172A\] {
+  color: rgb(241, 245, 249) !important;
+}
+
+.admin-dark-theme .text-\[\#64748B\],
+.admin-dark-theme .text-\[\#94A3B8\],
+.admin-dark-theme .text-slate-400 {
+  color: rgb(148, 163, 184) !important; /* text-slate-400 */
+}
+
+.admin-dark-theme input {
+  background-color: rgba(15, 23, 42, 0.6) !important;
+  border-color: rgba(30, 41, 59, 0.8) !important;
+  color: #fff !important;
+}
+
+.admin-dark-theme table th {
+  color: rgb(148, 163, 184) !important;
+  border-bottom-color: rgba(30, 41, 59, 0.8) !important;
+}
+
+.admin-dark-theme table tr {
+  border-bottom-color: rgba(30, 41, 59, 0.4) !important;
+}
+
+.admin-dark-theme table tr:hover {
+  background-color: rgba(30, 41, 59, 0.3) !important;
+}
+
+.admin-dark-theme .bg-indigo-50,
+.admin-dark-theme .bg-indigo-50\/50,
+.admin-dark-theme .bg-blue-50,
+.admin-dark-theme .bg-purple-50,
+.admin-dark-theme .bg-emerald-50 {
+  background-color: rgba(79, 70, 229, 0.1) !important;
+  color: rgb(165, 180, 252) !important;
+}
+
+.admin-dark-theme .text-blue-600,
+.admin-dark-theme .text-purple-600,
+.admin-dark-theme .text-emerald-600 {
+  color: rgb(165, 180, 252) !important;
+}
+
+.admin-dark-theme .shadow-sm {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -2px rgba(0, 0, 0, 0.3) !important;
+}
+
+.admin-dark-theme .text-indigo-450 {
+  color: rgb(129, 140, 248) !important;
+}
+
+.admin-dark-theme .text-slate-450 {
+  color: rgb(148, 163, 184) !important;
+}

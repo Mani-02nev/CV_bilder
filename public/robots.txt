@@ -1,3 +1,8 @@
 User-agent: *
 Allow: /
-Sitemap: https://cv-bilder.vercel.app/sitemap.xml
+Disallow: /admin
+Disallow: /dashboard
+
+Sitemap: https://mrk02.vercel.app/sitemap.xml
+Sitemap: https://mrk02.vercel.app/blog-sitemap.xml
+Sitemap: https://mrk02.vercel.app/image-sitemap.xml

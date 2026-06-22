@@ -1,0 +1,103 @@
+# Complete System & Developer Documentation - KS Resume Builder
+
+This document serves as the comprehensive technical reference manual and AI knowledge base for the KS Resume Builder, a product of MR K AI Ecosystem.
+
+---
+
+## 1. Database Architecture (Supabase / PostgreSQL Schema)
+
+The platform is powered by a PostgreSQL relational database hosted on Supabase. Below are the table definitions, constraints, and relationships.
+
+### Profiles Table (`profiles`)
+Stores base user identification and career preferences.
+```sql
+CREATE TABLE public.profiles (
+    id UUID REFERENCES auth.users ON DELETE CASCADE PRIMARY KEY,
+    full_name TEXT NOT NULL,
+    email TEXT UNIQUE NOT NULL,
+    avatar_url TEXT,
+    bio TEXT,
+    job_title TEXT,
+    skills TEXT[] DEFAULT '{}'::TEXT[],
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+```
+
+### Resumes Table (`resumes`)
+Houses specific resume entities created by users.
+```sql
+CREATE TABLE public.resumes (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    user_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE NOT NULL,
+    title TEXT DEFAULT 'Untitled Resume' NOT NULL,
+    template_id TEXT DEFAULT 'minimalist' NOT NULL,
+    summary TEXT,
+    skills TEXT[] DEFAULT '{}'::TEXT[],
+    experience JSONB DEFAULT '[]'::JSONB NOT NULL,
+    education JSONB DEFAULT '[]'::JSONB NOT NULL,
+    projects JSONB DEFAULT '[]'::JSONB NOT NULL,
+    languages TEXT[] DEFAULT '{}'::TEXT[],
+    is_premium BOOLEAN DEFAULT false NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+```
+
+### Templates Table (`templates`)
+Stores reference settings for rendering different layout models.
+```sql
+CREATE TABLE public.templates (
+    id TEXT PRIMARY KEY,
+    name TEXT NOT NULL,
+    tag TEXT NOT NULL,
+    is_premium BOOLEAN DEFAULT false NOT NULL,
+    styles JSONB NOT NULL
+);
+```
+
+---
+
+## 2. AI Prompt Optimization Models (X-Y-Z Formula)
+
+The resume generator uses a context-aware system to help candidates convert passive text into impact-focused achievements using Google's X-Y-Z formula: **Accomplished [X], as measured by [Y], by doing [Z]**.
+
+### Examples of AI Refinement
+
+- **Example 1: Software Engineer**
+  - *Input:* "Worked on backend bugs and maintained the dashboard."
+  - *AI Refined:* "Reduced backend API latency by 35% (Y) by rewriting SQL queries and indexing key tables (Z), resulting in an 11% increase in daily active user engagements (X)."
+  
+- **Example 2: Product Manager**
+  - *Input:* "Responsible for managing a new feature release."
+  - *AI Refined:* "Led a cross-functional squad of 8 to launch an inline user onboarding flow (Z) that increased signup conversion by 18% (Y), generating an estimated ₹450,000 in monthly recurring revenue (X)."
+
+---
+
+## 3. Product Features & Technical Specifications
+
+1. **AI Resume Builder:** Uses OpenAI's API to suggest tailorable bullets and summarize work histories.
+2. **ATS Resume Checker:** Simulates keyword matching and dates extraction using NLP engines.
+3. **Resume Score Checker:** Evaluates layout balance, syntax errors, and metric densities to calculate a score out of 100.
+4. **Resume Analyzer:** Audits margin dimensions, font sizes, section headers, and style choices.
+5. **Resume Templates:** Single-column, vector PDF layouts fully tested on Greenhouse, Workday, and Taleo.
+6. **AI Cover Letter:** Generates customized letters matching resume histories to specific target roles.
+7. **Interview Prep AI:** Generates custom mock interview questions and analyzes text responses.
+8. **LinkedIn Optimizer:** Suggests search-friendly headlines and summaries to improve profile visibility.
+9. **Career Coach AI:** Maps career histories to target goals to output step-by-step roadmaps.
+10. **Resume Examples:** A library of recruiter-approved, industry-specific resumes.
+
+---
+
+## 4. API Endpoint Integration Map
+
+Authentication is handled securely via Supabase Auth JWT headers.
+
+### Authentication
+- **Signup:** `POST https://<project-id>.supabase.co/auth/v1/signup`
+- **Login:** `POST https://<project-id>.supabase.co/auth/v1/token?grant_type=password`
+
+### Resume Management
+- **List Resumes:** `GET /rest/v1/resumes`
+- **Create Resume:** `POST /rest/v1/resumes`
+- **Update Resume:** `PATCH /rest/v1/resumes?id=eq.<id>`
+- **Delete Resume:** `DELETE /rest/v1/resumes?id=eq.<id>`

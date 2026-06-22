@@ -118,6 +118,33 @@ export const RESUME_TEMPLATES: Template[] = [
         category: 'professional',
         color: '#7F1D1D',
         isPremium: true
+    },
+    {
+        id: 'executive-split',
+        name: 'Executive Split',
+        description: 'Sophisticated dual-column layout with a prominent left sidebar for contact & skills',
+        preview: '/templates/executive-split.png',
+        category: 'executive',
+        color: '#1E3A8A',
+        isPremium: true
+    },
+    {
+        id: 'modern-timeline',
+        name: 'Modern Timeline',
+        description: 'Vibrant timeline-based theme featuring an elegant vertical connector between job roles',
+        preview: '/templates/modern-timeline.png',
+        category: 'modern',
+        color: '#0D9488',
+        isPremium: true
+    },
+    {
+        id: 'ats-pro',
+        name: 'ATS Premium Pro',
+        description: 'Highly parsed multi-section structure optimized for strict corporate screening systems',
+        preview: '/templates/ats-pro.png',
+        category: 'ats',
+        color: '#000000',
+        isPremium: true
     }
 ]
 

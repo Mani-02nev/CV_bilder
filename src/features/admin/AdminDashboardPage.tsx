@@ -185,32 +185,32 @@ export default function AdminDashboardPage() {
 
     if (loading && users.length === 0) {
         return (
-            <div className="flex h-screen bg-[#F8F9FB] animate-pulse">
-                <div className="w-[280px] bg-white border-r border-[#E2E8F0] p-6 space-y-8 hidden md:block">
-                    <div className="h-8 w-32 bg-gray-100 rounded-lg mb-10" />
+            <div className="flex h-screen bg-[#030712] text-white animate-pulse">
+                <div className="w-[280px] bg-slate-950/60 border-r border-slate-900 p-6 space-y-8 hidden md:block">
+                    <div className="h-8 w-32 bg-slate-900/60 rounded-lg mb-10" />
                     <div className="space-y-4">
                         {Array(7).fill(0).map((_, i) => (
-                            <div key={i} className="h-11 bg-gray-50 rounded-xl" />
+                            <div key={i} className="h-11 bg-slate-900/40 rounded-xl" />
                         ))}
                     </div>
                 </div>
                 <div className="flex-1 flex flex-col">
-                    <header className="h-20 bg-white border-b border-[#E2E8F0] px-8 flex items-center justify-between">
-                        <div className="h-10 w-64 bg-gray-100 rounded-xl" />
+                    <header className="h-20 bg-slate-950/60 border-b border-slate-900 px-8 flex items-center justify-between">
+                        <div className="h-10 w-64 bg-slate-900/60 rounded-xl" />
                         <div className="flex gap-4">
-                            <div className="h-10 w-10 bg-gray-100 rounded-xl" />
-                            <div className="h-10 w-32 bg-gray-100 rounded-full" />
+                            <div className="h-10 w-10 bg-slate-900/60 rounded-xl" />
+                            <div className="h-10 w-32 bg-slate-900/60 rounded-full" />
                         </div>
                     </header>
                     <main className="p-8 space-y-8">
                         <div className="grid grid-cols-4 gap-6">
                             {Array(4).fill(0).map((_, i) => (
-                                <div key={i} className="h-32 bg-white rounded-2xl shadow-sm border border-gray-50" />
+                                <div key={i} className="h-32 bg-slate-950/40 rounded-2xl shadow-sm border border-slate-900" />
                             ))}
                         </div>
                         <div className="grid lg:grid-cols-7 gap-8">
-                            <div className="lg:col-span-4 h-[400px] bg-white rounded-2xl border border-gray-50" />
-                            <div className="lg:col-span-3 h-[400px] bg-white rounded-2xl border border-gray-50" />
+                            <div className="lg:col-span-4 h-[400px] bg-slate-950/40 rounded-2xl border border-slate-900" />
+                            <div className="lg:col-span-3 h-[400px] bg-slate-950/40 rounded-2xl border border-slate-900" />
                         </div>
                     </main>
                 </div>
@@ -219,23 +219,23 @@ export default function AdminDashboardPage() {
     }
 
     return (
-        <div className="min-h-screen bg-[#F8F9FB] flex overflow-hidden font-sans selection:bg-indigo-100 selection:text-indigo-900">
+        <div className="min-h-screen bg-[#030712] text-white flex overflow-hidden font-sans selection:bg-indigo-500/20 selection:text-indigo-400 admin-dark-theme">
             {/* Sidebar */}
             <motion.aside
                 initial={false}
                 animate={{ width: sidebarCollapsed ? 80 : 280 }}
                 role="navigation"
                 aria-label="Desktop Sidebar"
-                className={`hidden md:flex flex-col bg-white border-r border-[#E2E8F0] z-50 transition-all duration-300 ease-in-out`}
+                className={`hidden md:flex flex-col bg-slate-950/60 border-r border-slate-900 z-50 transition-all duration-300 ease-in-out backdrop-blur-md`}
             >
-                <div className="h-20 flex items-center px-6 border-b border-[#F1F5F9]">
+                <div className="h-20 flex items-center px-6 border-b border-slate-900">
                     <div className="flex items-center gap-3 overflow-hidden">
                         <img src={logo} alt="KS Logo" className="h-8 w-8 min-w-[32px] object-contain" />
                         {!sidebarCollapsed && (
                             <motion.span
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
-                                className="font-black text-lg tracking-tight text-[#0F172A] whitespace-nowrap uppercase italic"
+                                className="font-black text-lg tracking-tight text-white whitespace-nowrap uppercase italic"
                             >
                                 KS Admin
                             </motion.span>
@@ -249,28 +249,28 @@ export default function AdminDashboardPage() {
                             key={item.id}
                             onClick={() => setActiveView(item.id as AdminView)}
                             aria-label={`Switch to ${item.label} view`}
-                            className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 group relative
+                            className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 group relative border
                                 ${activeView === item.id
-                                    ? 'bg-[#0F172A] text-white shadow-xl shadow-[#0F172A]/10'
-                                    : 'text-[#64748B] hover:bg-[#F1F5F9] hover:text-[#0F172A]'
+                                    ? 'bg-indigo-600/10 text-indigo-450 border-indigo-500/20 font-bold'
+                                    : 'text-slate-400 border-transparent hover:bg-slate-900/50 hover:text-white'
                                 }
                             `}
                         >
-                            <item.icon className={`h-5 w-5 min-w-[20px] ${activeView === item.id ? 'text-white' : 'group-hover:text-[#0F172A]'}`} />
+                            <item.icon className={`h-5 w-5 min-w-[20px] ${activeView === item.id ? 'text-indigo-400' : 'group-hover:text-white'}`} />
                             {!sidebarCollapsed && (
                                 <span className="font-medium text-sm">{item.label}</span>
                             )}
                             {sidebarCollapsed && activeView === item.id && (
-                                <div className="absolute left-0 w-1 h-6 bg-[#0F172A] rounded-r-full" />
+                                <div className="absolute left-0 w-1 h-6 bg-indigo-500 rounded-r-full" />
                             )}
                         </button>
                     ))}
                 </div>
 
-                <div className="p-4 border-t border-[#F1F5F9]">
+                <div className="p-4 border-t border-slate-900">
                     <button
                         onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-                        className="w-full h-10 flex items-center justify-center rounded-lg hover:bg-[#F1F5F9] text-[#64748B] transition-colors"
+                        className="w-full h-10 flex items-center justify-center rounded-lg hover:bg-slate-900/50 text-slate-450 transition-colors"
                     >
                         {sidebarCollapsed ? <ChevronDown className="rotate-270" /> : <X className="h-5 w-5" />}
                     </button>
@@ -285,7 +285,7 @@ export default function AdminDashboardPage() {
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={() => setIsMobileMenuOpen(false)}
-                        className="fixed inset-0 bg-black/50 z-[60] md:hidden backdrop-blur-sm"
+                        className="fixed inset-0 bg-black/60 z-[60] md:hidden backdrop-blur-sm"
                     />
                 )}
             </AnimatePresence>
@@ -295,14 +295,14 @@ export default function AdminDashboardPage() {
                 initial={{ x: '-100%' }}
                 animate={{ x: isMobileMenuOpen ? 0 : '-100%' }}
                 transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                className="fixed top-0 left-0 bottom-0 w-72 bg-white z-[70] md:hidden shadow-2xl flex flex-col"
+                className="fixed top-0 left-0 bottom-0 w-72 bg-slate-950 border-r border-slate-900 z-[70] md:hidden shadow-2xl flex flex-col text-white"
             >
-                <div className="h-20 flex items-center justify-between px-6 border-b border-[#F1F5F9]">
+                <div className="h-20 flex items-center justify-between px-6 border-b border-slate-900">
                     <div className="flex items-center gap-3">
                         <img src={logo} alt="KS" className="h-8 w-8" />
-                        <span className="font-bold text-lg text-[#0F172A]">KS Admin</span>
+                        <span className="font-bold text-lg text-white">KS Admin</span>
                     </div>
-                    <Button variant="ghost" size="icon" onClick={() => setIsMobileMenuOpen(false)}>
+                    <Button variant="ghost" size="icon" className="hover:bg-slate-900 text-slate-400 hover:text-white" onClick={() => setIsMobileMenuOpen(false)}>
                         <X className="h-5 w-5" />
                     </Button>
                 </div>
@@ -311,14 +311,14 @@ export default function AdminDashboardPage() {
                         <button
                             key={item.id}
                             onClick={() => { setActiveView(item.id as AdminView); setIsMobileMenuOpen(false); }}
-                            className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl transition-all
+                            className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl transition-all border
                                 ${activeView === item.id
-                                    ? 'bg-[#0F172A] text-white shadow-lg shadow-[#0F172A]/10'
-                                    : 'text-[#64748B] hover:bg-[#F1F5F9] hover:text-[#0F172A]'
+                                    ? 'bg-indigo-600/10 text-indigo-400 border-indigo-500/20 font-bold'
+                                    : 'text-slate-400 border-transparent hover:bg-slate-900 hover:text-white'
                                 }
                             `}
                         >
-                            <item.icon className={`h-5 w-5 ${activeView === item.id ? 'text-white' : ''}`} />
+                            <item.icon className={`h-5 w-5 ${activeView === item.id ? 'text-indigo-400' : ''}`} />
                             <span className="font-medium text-sm">{item.label}</span>
                         </button>
                     ))}
@@ -330,24 +330,24 @@ export default function AdminDashboardPage() {
                 {/* Top Nav */}
                 <header
                     role="banner"
-                    className="h-20 bg-white/80 backdrop-blur-md border-b border-[#E2E8F0] shrink-0 z-40 px-6 sm:px-8"
+                    className="h-20 bg-slate-950/60 backdrop-blur-md border-b border-slate-900 shrink-0 z-40 px-6 sm:px-8"
                 >
                     <div className="h-full flex items-center justify-between gap-4">
                         <div className="flex items-center gap-4 flex-1">
                             <Button
                                 variant="ghost"
                                 size="icon"
-                                className="md:hidden"
+                                className="md:hidden text-slate-400 hover:text-white hover:bg-slate-900"
                                 onClick={() => setIsMobileMenuOpen(true)}
                                 aria-label="Open sidebar"
                             >
                                 <Menu className="h-5 w-5" />
                             </Button>
                             <div className="relative max-w-md w-full hidden sm:block">
-                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#94A3B8]" />
+                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
                                 <Input
                                     placeholder="Search command or user..."
-                                    className="pl-10 h-10 bg-[#F8F9FB] border-[#E2E8F0] focus-visible:ring-1 focus-visible:ring-[#0F172A] rounded-lg"
+                                    className="pl-10 h-10 bg-slate-900/60 border-slate-900 text-white placeholder-slate-600 focus-visible:ring-1 focus-visible:ring-indigo-500/50 rounded-lg"
                                 />
                             </div>
                         </div>
@@ -357,36 +357,36 @@ export default function AdminDashboardPage() {
                                 variant="ghost"
                                 size="icon"
                                 aria-label="View notifications"
-                                className="relative text-[#64748B] hover:bg-[#F1F5F9] rounded-lg"
+                                className="relative text-slate-400 hover:text-white hover:bg-slate-900 rounded-lg"
                             >
                                 <Bell className="h-5 w-5" />
-                                <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-indigo-500 rounded-full border-2 border-white animate-pulse" />
+                                <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-indigo-500 rounded-full border-2 border-slate-950 animate-pulse" />
                             </Button>
 
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
-                                    <button className="flex items-center gap-3 pl-2 pr-1 py-1 rounded-full hover:bg-[#F1F5F9] transition-colors border border-[#E2E8F0] sm:border-none">
-                                        <div className="w-8 h-8 rounded-full bg-[#0F172A] text-white flex items-center justify-center font-bold text-xs">MA</div>
+                                    <button className="flex items-center gap-3 pl-2 pr-1 py-1 rounded-full hover:bg-slate-900/50 transition-colors border border-slate-900 sm:border-none">
+                                        <div className="w-8 h-8 rounded-full bg-indigo-650 text-white flex items-center justify-center font-bold text-xs">MA</div>
                                         <div className="hidden lg:block text-left mr-2">
-                                            <p className="text-xs font-bold text-[#0F172A]">Mani Admin</p>
-                                            <p className="text-[10px] text-[#64748B]">Super Admin</p>
+                                            <p className="text-xs font-bold text-white">Mani Admin</p>
+                                            <p className="text-[10px] text-slate-500">Super Admin</p>
                                         </div>
-                                        <ChevronDown className="h-4 w-4 text-[#64748B]" />
+                                        <ChevronDown className="h-4 w-4 text-slate-500" />
                                     </button>
                                 </DropdownMenuTrigger>
-                                <DropdownMenuContent align="end" className="w-56 mt-2 rounded-2xl p-2 border-[#E2E8F0] shadow-xl">
-                                    <DropdownMenuLabel className="font-bold px-3 pt-2 text-xs text-[#94A3B8] uppercase tracking-widest">Administrator</DropdownMenuLabel>
-                                    <DropdownMenuSeparator className="bg-[#F1F5F9] my-2" />
-                                    <DropdownMenuItem className="rounded-xl gap-2 cursor-pointer px-3 py-3 font-medium text-sm focus:bg-indigo-50 transition-colors">
-                                        <User className="w-4 h-4" /> Profile Settings
+                                <DropdownMenuContent align="end" className="w-56 mt-2 bg-slate-950 text-slate-300 border-slate-900 rounded-2xl p-2 shadow-xl font-sans">
+                                    <DropdownMenuLabel className="font-bold px-3 pt-2 text-[10px] text-slate-500 uppercase tracking-widest">Administrator</DropdownMenuLabel>
+                                    <DropdownMenuSeparator className="bg-slate-900 my-2" />
+                                    <DropdownMenuItem className="rounded-xl gap-2 cursor-pointer px-3 py-3 font-medium text-sm hover:bg-slate-900 hover:text-white transition-colors">
+                                        <User className="w-4 h-4 text-slate-400" /> Profile Settings
                                     </DropdownMenuItem>
-                                    <DropdownMenuItem className="rounded-xl gap-2 cursor-pointer px-3 py-3 font-medium text-sm focus:bg-indigo-50 transition-colors">
-                                        <ShieldCheck className="w-4 h-4" /> Security Audit
+                                    <DropdownMenuItem className="rounded-xl gap-2 cursor-pointer px-3 py-3 font-medium text-sm hover:bg-slate-900 hover:text-white transition-colors">
+                                        <ShieldCheck className="w-4 h-4 text-slate-400" /> Security Audit
                                     </DropdownMenuItem>
-                                    <DropdownMenuSeparator className="bg-[#F1F5F9] my-2" />
+                                    <DropdownMenuSeparator className="bg-slate-900 my-2" />
                                     <DropdownMenuItem
                                         onClick={handleLogout}
-                                        className="rounded-xl gap-2 cursor-pointer px-3 py-3 font-bold text-sm text-[#F43F5E] focus:text-[#F43F5E] focus:bg-[#FFF1F2]"
+                                        className="rounded-xl gap-2 cursor-pointer px-3 py-3 font-bold text-sm text-[#F43F5E] hover:text-[#F43F5E] hover:bg-[#FFF1F2]/10"
                                     >
                                         <LogOut className="w-4 h-4" /> Terminate Session
                                     </DropdownMenuItem>

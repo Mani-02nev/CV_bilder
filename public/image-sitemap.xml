@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>https://mrk02.vercel.app/</loc>
+    <image:image>
+      <image:loc>https://mrk02.vercel.app/logo.png</image:loc>
+      <image:title>KS Resume Builder Logo</image:title>
+      <image:caption>Official logo for the KS Resume Builder platform by MR K AI Ecosystem.</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://mrk02.vercel.app/og-image.png</image:loc>
+      <image:title>KS Resume Builder Preview Card</image:title>
+      <image:caption>Search landing preview for the ATS resume optimization platform.</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://mrk02.vercel.app/founder</loc>
+    <image:image>
+      <image:loc>https://mrk02.vercel.app/assets/founder-D5-vKkZf.png</image:loc>
+      <image:title>Karuppasamy M</image:title>
+      <image:caption>Portrait of Karuppasamy M (Mani), Founder & CEO of MR K AI Ecosystem.</image:caption>
+    </image:image>
+  </url>
+</urlset>

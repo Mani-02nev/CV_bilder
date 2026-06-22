@@ -1,0 +1,18 @@
+{
+  "short_name": "KS Resume",
+  "name": "KS Resume Builder by MR K AI Ecosystem",
+  "description": "ATS-optimized AI Resume Builder & CV Generator",
+  "icons": [
+    {
+      "src": "/logo.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#030712",
+  "theme_color": "#6366f1",
+  "display": "standalone",
+  "orientation": "portrait"
+}
